@@ -63,9 +63,7 @@ body{
   -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
   position:relative;
-  cursor:none;
 }
-@media(max-width:900px){body{cursor:auto}}
 
 /* Grain texture global */
 body::before{
@@ -79,27 +77,9 @@ body::before{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.96, 0 0 0 0 0.92, 0 0 0 0 0.88, 0 0 0 0.13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-a{color:inherit;text-decoration:none}
+a{color:inherit;text-decoration:none;cursor:pointer}
 img{max-width:100%;display:block}
-button{font-family:inherit;background:none;border:none;color:inherit;cursor:none}
-
-/* ============================================
-   CURSOR CUSTOM
-   ============================================ */
-.cursor{
-  position:fixed;
-  top:0;left:0;
-  width:8px;height:8px;
-  background:var(--ocre);
-  border-radius:50%;
-  pointer-events:none;
-  z-index:9999;
-  transform:translate(-50%,-50%);
-  transition:width .25s,height .25s,background .25s,opacity .25s;
-  mix-blend-mode:difference;
-}
-.cursor.click{width:6px;height:6px;opacity:.7}
-@media(max-width:900px){.cursor{display:none}}
+button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer}
 
 /* ============================================
    GRIOTTE — Scroll-driven figure
@@ -302,7 +282,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   font-weight:600;
   letter-spacing:.01em;
   transition:transform .35s cubic-bezier(.2,.8,.2,1),background .3s,color .3s,border-color .3s,box-shadow .35s;
-  cursor:none;
+  cursor:pointer;
   white-space:nowrap;
   overflow:hidden;
 }
@@ -1105,9 +1085,6 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div class="cursor" id="cursor"></div>
-
 <!-- Griotte (scroll-driven figure) -->
 <div class="griotte" id="griotte" aria-hidden="true">
   <svg viewBox="0 0 200 280" fill="none">
@@ -1641,24 +1618,6 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
 
 <script>
 (function(){
-  // ============================================
-  // CURSOR CUSTOM (desktop only)
-  // ============================================
-  if (window.matchMedia('(min-width: 901px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const cur = document.getElementById('cursor');
-    let cx=0, cy=0, tx=0, ty=0;
-    document.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; });
-    function tick(){
-      cx += (tx-cx) * .25;
-      cy += (ty-cy) * .25;
-      cur.style.transform = `translate(${cx-4}px,${cy-4}px)`;
-      requestAnimationFrame(tick);
-    }
-    tick();
-    document.addEventListener('mousedown', () => cur.classList.add('click'));
-    document.addEventListener('mouseup', () => cur.classList.remove('click'));
-  }
-
   // ============================================
   // GRIOTTE — scroll-driven figure
   // ============================================
