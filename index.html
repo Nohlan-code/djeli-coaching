@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1A1410">
+<meta name="theme-color" content="#0F0A07">
 <title>Djeli Coaching — Je te ramène à ta propre histoire.</title>
 <meta name="description" content="Coach certifiée PNL · CNV · Griotte moderne. Coaching de transformation pour femmes CSP+, cadres, dirigeantes, entrepreneuses.">
-<meta name="author" content="Djeli Coaching">
 <link rel="canonical" href="https://djeli-coaching.vercel.app/">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Djeli Coaching — Le Livre Rituel">
+<meta property="og:title" content="Djeli Coaching — Le voyage griotte">
 <meta property="og:description" content="Pour les femmes qui jouent grand. PNL · CNV · Tradition Djeli.">
 <meta property="og:locale" content="fr_FR">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231A1410'/%3E%3Cpath d='M16 5 L27 16 L16 27 L5 16 Z M16 11 L11 16 L16 21 L21 16 Z' fill='%23C8956D'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230F0A07'/%3E%3Cpath d='M16 5 L27 16 L16 27 L5 16 Z M16 11 L11 16 L16 21 L21 16 Z' fill='%23C8956D'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,13 +45,15 @@
   --sans:'Satoshi','Helvetica Neue',sans-serif;
   --max:1320px;
   --pad:clamp(20px,4vw,72px);
+
+  /* Driven by scroll */
+  --scroll:0;
+  --scroll-px:0px;
 }
 
 html{
   -webkit-text-size-adjust:100%;
-  scroll-snap-type:y proximity;
-  scroll-behavior:smooth;
-  scroll-padding-top:0;
+  scroll-behavior:auto;
 }
 
 body{
@@ -65,6 +66,24 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
+  position:relative;
+}
+
+/* Background overlay that interpolates with scroll */
+.bg-flow{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 60vw 50vh at calc(50% + var(--scroll) * 30vw - 15vw) calc(40% + var(--scroll) * 20vh) ,
+      hsla(calc(20 + var(--scroll) * 200), 60%, 18%, .7) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 80vw 60vh at calc(70% - var(--scroll) * 50vw) 50%,
+      hsla(calc(40 - var(--scroll) * 180), 50%, 14%, .55) 0%,
+      transparent 70%),
+    var(--charbon);
+  transition:background .25s linear;
 }
 
 /* Grain texture */
@@ -84,34 +103,9 @@ img{max-width:100%;display:block}
 button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer}
 
 /* ============================================
-   PAGE COUNTER + INDEX
+   BRAND + SCROLL PROGRESS
    ============================================ */
-.book-counter{
-  position:fixed;
-  top:32px;right:32px;
-  z-index:80;
-  font-family:var(--display);
-  font-size:14px;
-  font-weight:400;
-  letter-spacing:.18em;
-  color:var(--ivoire-mu);
-  display:flex;
-  align-items:center;
-  gap:14px;
-  pointer-events:none;
-  mix-blend-mode:difference;
-}
-.book-counter .num{
-  font-family:var(--display);
-  font-size:22px;
-  color:var(--ocre);
-  font-weight:300;
-  letter-spacing:0;
-}
-@media(max-width:900px){.book-counter{top:18px;right:18px;font-size:11px}.book-counter .num{font-size:18px}}
-
-/* Brand mark fixed top-left */
-.book-brand{
+.brand{
   position:fixed;
   top:32px;left:32px;
   z-index:80;
@@ -119,134 +113,115 @@ button{font-family:inherit;background:none;border:none;color:inherit;cursor:poin
   font-size:18px;
   font-weight:500;
   letter-spacing:.06em;
-  color:var(--ivoire);
   display:flex;
   align-items:center;
   gap:10px;
+  color:var(--ivoire);
   mix-blend-mode:difference;
 }
-.book-brand .lozenge{
+.brand .lozenge{
   width:12px;height:12px;
   background:var(--ocre);
-  transform:rotate(45deg);
+  transform:rotate(45deg) scale(calc(1 + var(--scroll) * .5));
+  transition:transform .3s linear;
 }
-@media(max-width:900px){.book-brand{top:18px;left:18px;font-size:14px}}
+
+.scroll-progress{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:2px;
+  z-index:90;
+  background:rgba(245,235,224,.06);
+}
+.scroll-progress::after{
+  content:'';
+  display:block;
+  height:100%;
+  width:calc(var(--scroll) * 100%);
+  background:linear-gradient(90deg,var(--ocre),var(--or),var(--rouge-wax));
+  transition:width .15s linear;
+}
+
+@media(max-width:900px){.brand{top:18px;left:18px;font-size:14px}}
 
 /* ============================================
-   GRIOTTE STAGE — SVG figures cross-fade
+   GRIOTTE — flotte continûment
    ============================================ */
-.griotte-stage{
+.griotte{
   position:fixed;
   top:50%;
-  right:5vw;
-  transform:translateY(-50%);
-  width:clamp(220px,30vw,440px);
+  right:calc(5vw + (var(--scroll) - .5) * 8vw);
+  width:clamp(220px,28vw,420px);
   aspect-ratio:1/1.4;
   z-index:5;
   pointer-events:none;
+  transform:translateY(calc(-50% + (var(--scroll) - .5) * 80px))
+            scale(calc(1 + sin(var(--scroll) * 6.28) * .04))
+            rotate(calc((var(--scroll) - .5) * 12deg));
+  filter:drop-shadow(0 24px 48px rgba(0,0,0,.5));
+  transition:transform .4s cubic-bezier(.2,.8,.2,1);
 }
 .figure{
   position:absolute;
   inset:0;
   width:100%;height:100%;
   opacity:0;
-  transform:scale(.92) rotate(-2deg);
-  transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform 1.2s cubic-bezier(.2,.8,.2,1);
-  filter:drop-shadow(0 24px 48px rgba(0,0,0,.4));
+  transition:opacity .8s cubic-bezier(.2,.8,.2,1);
 }
-.figure.active{opacity:.95;transform:scale(1) rotate(0deg)}
 .figure svg{width:100%;height:100%}
-@media(max-width:900px){.griotte-stage{display:none}}
+@media(max-width:900px){.griotte{display:none}}
 
 /* ============================================
-   PAGE STRUCTURE
+   TYPOGRAPHIE
    ============================================ */
-.page{
+h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-spacing:-.025em;color:var(--ivoire)}
+.it{font-family:var(--italic);font-style:italic;font-weight:400;letter-spacing:0;color:var(--ocre)}
+
+/* Split letters */
+.split-letter{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(40px) rotate(8deg);
+  transition:opacity .6s,transform .8s cubic-bezier(.2,.8,.2,1);
+}
+.split-letter.in{opacity:1;transform:translateY(0) rotate(0)}
+
+/* Decorative SVG line */
+.deco-line{
+  position:absolute;
+  pointer-events:none;
+  z-index:1;
+}
+.deco-line path{
+  fill:none;
+  stroke:var(--ocre);
+  stroke-width:1;
+  opacity:.5;
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1);
+}
+.deco-line.in path{stroke-dashoffset:0}
+
+/* ============================================
+   HERO — L'Ouverture (continuous, no snap)
+   ============================================ */
+.scene{
+  position:relative;
+  padding:120px var(--pad);
+  max-width:var(--max);
+  margin:0 auto;
+}
+
+.hero{
   min-height:100vh;
-  scroll-snap-align:start;
-  padding:96px var(--pad);
+  padding-top:160px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   position:relative;
-  overflow:hidden;
 }
-@media(max-width:900px){.page{min-height:auto;padding:96px var(--pad) 80px}}
-
-.page-num{
-  font-family:var(--display);
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:.32em;
-  text-transform:uppercase;
-  color:var(--ocre);
-  display:inline-flex;
-  align-items:center;
-  gap:14px;
-  margin-bottom:48px;
-}
-.page-num::before{content:'';width:32px;height:1px;background:var(--ocre)}
-.page-num em.page-roman{
-  font-family:var(--display);
-  font-style:italic;
-  font-size:13px;
-  color:var(--ocre);
-  letter-spacing:.06em;
-}
-
-.page-content{
-  max-width:780px;
-  position:relative;
-  z-index:2;
-}
-
-h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-spacing:-.025em}
-.it{font-family:var(--italic);font-style:italic;font-weight:400;letter-spacing:0}
-
-/* ============================================
-   PAGE I — L'Ouverture
-   ============================================ */
-.page-1{
-  background:linear-gradient(180deg,var(--charbon) 0%,var(--charbon-2) 100%);
-}
-.page-1::before{
-  content:'';
-  position:absolute;
-  top:-20%;left:30%;
-  width:80vw;height:80vh;
-  background:radial-gradient(circle,rgba(212,165,116,.15) 0%,transparent 60%);
-  pointer-events:none;
-}
-.h1-mega{
-  font-family:var(--display);
-  font-size:clamp(54px,10.5vw,168px);
-  font-weight:200;
-  line-height:.92;
-  letter-spacing:-.045em;
-  color:var(--ivoire);
-  margin-bottom:48px;
-}
-.h1-mega .line{display:block;overflow:hidden;padding-bottom:.04em}
-.h1-mega .line-inner{
-  display:inline-block;
-  transform:translateY(105%);
-  animation:hero-line 1.2s forwards cubic-bezier(.22,.94,.32,1);
-}
-.h1-mega .line:nth-child(1) .line-inner{animation-delay:.3s}
-.h1-mega .line:nth-child(2) .line-inner{animation-delay:.5s}
-.h1-mega .line:nth-child(3) .line-inner{animation-delay:.7s}
-.h1-mega em.it{font-family:var(--italic);font-style:italic;color:var(--ocre);font-weight:400}
-.page-1 .lead{
-  font-family:var(--italic);
-  font-style:italic;
-  font-size:clamp(20px,2.4vw,32px);
-  line-height:1.4;
-  color:var(--ivoire-mu);
-  max-width:600px;
-  opacity:0;
-  animation:rise 1s 1.4s forwards;
-}
-.page-1 .badge-csp{
+.hero-eyebrow{
   display:inline-flex;
   align-items:center;
   gap:14px;
@@ -257,61 +232,180 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   color:var(--ivoire-mu);
   margin-bottom:48px;
   opacity:0;
-  animation:rise .9s .1s forwards;
+  animation:rise 1s .1s forwards cubic-bezier(.2,.8,.2,1);
 }
-.page-1 .badge-csp::before{content:'';width:24px;height:1px;background:var(--ocre)}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--ocre)}
+.hero-eyebrow .dot{
+  width:6px;height:6px;
+  background:var(--ocre);
+  border-radius:50%;
+  animation:pulse 2s ease-in-out infinite;
+}
+
+.h1-mega{
+  font-family:var(--display);
+  font-size:clamp(56px,11vw,180px);
+  font-weight:200;
+  line-height:.92;
+  letter-spacing:-.045em;
+  margin-bottom:48px;
+  max-width:1100px;
+}
+.h1-mega .line{display:block;overflow:hidden;padding-bottom:.04em}
+.h1-mega .line-inner{
+  display:inline-block;
+  transform:translateY(105%);
+  animation:hero-line 1.2s forwards cubic-bezier(.22,.94,.32,1);
+}
+.h1-mega .line:nth-child(1) .line-inner{animation-delay:.3s}
+.h1-mega .line:nth-child(2) .line-inner{animation-delay:.5s}
+.h1-mega .line:nth-child(3) .line-inner{animation-delay:.7s}
+.hero-lead{
+  font-family:var(--italic);
+  font-style:italic;
+  font-size:clamp(20px,2.4vw,30px);
+  line-height:1.45;
+  color:var(--ivoire-mu);
+  max-width:600px;
+  opacity:0;
+  animation:rise 1s 1.4s forwards;
+}
+
+.scroll-hint{
+  position:absolute;
+  bottom:60px;left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  font-size:10px;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  color:var(--ivoire-mu);
+  opacity:0;
+  animation:rise 1s 2s forwards;
+}
+.scroll-hint .line{
+  width:1px;height:48px;
+  background:linear-gradient(180deg,var(--ocre),transparent);
+  animation:scroll-line 2.4s ease-in-out infinite;
+  transform-origin:top;
+}
+@keyframes scroll-line{
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+@media(max-width:900px){.scroll-hint{display:none}}
 
 /* ============================================
-   PAGE II — La Voix (about)
+   SECTIONS NARRATIVES (about, intro outils, etc.)
    ============================================ */
-.page-2{
-  background:var(--charbon);
+.scene-about{
+  padding:30vh var(--pad) 30vh;
+  max-width:var(--max);
+  margin:0 auto;
 }
-.page-2 .accent-rule{
-  width:100px;height:1px;
-  background:var(--or);
-  margin:0 0 36px;
+.eb{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--ocre);
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:36px;
 }
-.h2-page{
-  font-size:clamp(40px,5.6vw,88px);
-  margin-bottom:42px;
-  color:var(--ivoire);
+.eb::before{content:'';width:32px;height:1px;background:var(--ocre)}
+
+.h2-mega{
+  font-size:clamp(42px,6vw,108px);
+  font-weight:300;
+  line-height:1;
+  letter-spacing:-.035em;
+  margin-bottom:48px;
 }
-.h2-page em.it{font-family:var(--italic);color:var(--or);font-weight:400}
-.page-2 p{
+.h2-mega em.it{color:var(--ocre);font-weight:400;letter-spacing:0}
+
+.scene p{
   font-size:clamp(16px,1.3vw,21px);
   line-height:1.7;
   color:var(--ivoire-mu);
   margin-bottom:24px;
-  max-width:640px;
+  max-width:680px;
 }
-.page-2 strong{color:var(--ivoire);font-weight:500}
+.scene strong{color:var(--ivoire);font-weight:500}
 
 /* ============================================
-   PAGES OUTILS — III, IV, V
+   OUTILS — horizontal pinning
    ============================================ */
-.page-3{background:linear-gradient(135deg,var(--charbon) 0%,#1F0F0A 100%)}
-.page-3 em.it,.page-3 .accent{color:var(--rouge-wax)}
-.page-3 .page-num{color:var(--rouge-wax)}
-.page-3 .page-num::before{background:var(--rouge-wax)}
-
-.page-4{background:linear-gradient(135deg,#3B2415 0%,var(--ocre) 100%);color:var(--charbon)}
-.page-4 .page-num{color:var(--charbon)}
-.page-4 .page-num::before{background:var(--charbon)}
-.page-4 em.it,.page-4 .accent{color:var(--charbon)}
-.page-4 h2{color:var(--charbon)}
-.page-4 p{color:rgba(15,10,7,.78)}
-.page-4 strong{color:var(--charbon)}
-
-.page-5{background:linear-gradient(135deg,var(--charbon) 0%,#0A1F18 100%)}
-.page-5 em.it,.page-5 .accent{color:var(--vert-kente)}
-.page-5 .page-num{color:var(--vert-kente)}
-.page-5 .page-num::before{background:var(--vert-kente)}
+.tools-pin{
+  position:relative;
+  height:400vh;  /* 4 viewports of vertical scroll = 3 horizontal slides */
+}
+.tools-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+}
+.tools-track{
+  display:flex;
+  gap:0;
+  height:100%;
+  align-items:center;
+  transform:translateX(calc(var(--tools-x, 0) * -1px));
+  transition:transform .15s linear;
+  will-change:transform;
+}
+.tool-slide{
+  flex-shrink:0;
+  width:100vw;
+  height:100vh;
+  padding:120px var(--pad);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+}
+.tool-slide-inner{max-width:780px}
+.tool-num{
+  font-family:var(--display);
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.tool-num em{font-family:var(--italic);font-style:italic;font-size:14px;letter-spacing:.06em}
+.tool-num::before{content:'';width:32px;height:1px;background:currentColor}
 
 .tool-h2{
-  font-size:clamp(40px,5.6vw,88px);
-  margin-bottom:32px;
-  font-weight:300;
+  font-size:clamp(48px,7vw,128px);
+  font-weight:200;
+  line-height:.95;
+  margin-bottom:36px;
+  letter-spacing:-.035em;
+}
+.tool-h2 em.it{font-family:var(--italic);font-weight:400;letter-spacing:0}
+.tool-quote{
+  font-family:var(--italic);
+  font-style:italic;
+  font-size:clamp(20px,2vw,30px);
+  line-height:1.45;
+  margin-top:36px;
+  padding-left:24px;
+  border-left:2px solid currentColor;
+  max-width:640px;
 }
 .tool-meta{
   font-family:var(--italic);
@@ -320,47 +414,64 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   margin-bottom:36px;
   opacity:.85;
 }
-.page p.lead-tool{
-  font-size:clamp(15px,1.2vw,19px);
+.tool-slide p{
+  font-size:clamp(16px,1.3vw,20px);
   line-height:1.7;
   max-width:680px;
   margin-bottom:18px;
 }
-.tool-quote{
-  font-family:var(--italic);
-  font-style:italic;
-  font-size:clamp(20px,2vw,28px);
-  line-height:1.4;
-  margin-top:36px;
-  padding-left:20px;
-  border-left:2px solid currentColor;
-  max-width:640px;
+
+/* Couleurs par slide */
+.slide-pnl{background:linear-gradient(135deg,#1F0F0A 0%,#0F0A07 100%)}
+.slide-pnl .tool-num,.slide-pnl em.it,.slide-pnl strong{color:var(--rouge-wax)}
+.slide-pnl strong{color:var(--ivoire)}
+.slide-pnl .accent{color:var(--rouge-wax)}
+
+.slide-cnv{background:linear-gradient(135deg,#3B2415 0%,var(--ocre) 100%);color:var(--charbon)}
+.slide-cnv .tool-num,.slide-cnv em.it,.slide-cnv .accent{color:var(--charbon)}
+.slide-cnv h2{color:var(--charbon)}
+.slide-cnv p{color:rgba(15,10,7,.78)}
+.slide-cnv strong{color:var(--charbon)}
+
+.slide-djeli{background:linear-gradient(135deg,#0F0A07 0%,#0A1F18 100%)}
+.slide-djeli .tool-num,.slide-djeli em.it,.slide-djeli .accent{color:var(--vert-kente)}
+.slide-djeli strong{color:var(--ivoire)}
+
+@media(max-width:900px){
+  .tools-pin{height:auto}
+  .tools-sticky{position:static;height:auto;display:block}
+  .tools-track{flex-direction:column;transform:none !important;height:auto}
+  .tool-slide{width:100%;height:auto;min-height:80vh;padding:80px var(--pad)}
 }
 
 /* ============================================
-   PAGE VI — Pour qui
+   FEMME — Pour qui
    ============================================ */
-.page-6{background:linear-gradient(135deg,var(--charbon) 0%,#0A1428 100%)}
-.page-6 em.it,.page-6 .accent{color:var(--jaune-mali)}
-.page-6 .page-num{color:var(--jaune-mali)}
-.page-6 .page-num::before{background:var(--jaune-mali)}
+.scene-femme{
+  padding:30vh var(--pad) 30vh;
+  max-width:var(--max);
+  margin:0 auto;
+  position:relative;
+}
+.scene-femme .h2-mega em.it{color:var(--jaune-mali)}
+.scene-femme .accent{color:var(--jaune-mali)}
 
 /* ============================================
-   PAGE VII — Le Parcours (long, no snap)
+   PARCOURS
    ============================================ */
-.page-7{
-  scroll-snap-align:none;
-  min-height:auto;
-  padding:120px var(--pad);
-  background:var(--charbon);
+.scene-parcours{
+  padding:25vh var(--pad) 15vh;
+  max-width:var(--max);
+  margin:0 auto;
+  position:relative;
 }
-.page-7-header{max-width:780px;margin-bottom:80px}
+.scene-parcours-header{max-width:800px;margin-bottom:72px}
 
 .parcours-steps{
   display:flex;
   justify-content:center;
   max-width:880px;
-  margin:0 auto 80px;
+  margin:0 auto 72px;
   position:relative;
 }
 .parcours-steps::before{
@@ -371,7 +482,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   height:1px;
   background:var(--ivoire-fd);
 }
-.step{flex:1;text-align:center;position:relative}
+.step{flex:1;text-align:center;position:relative;cursor:pointer}
 .step-dot{
   width:36px;height:36px;
   border-radius:50%;
@@ -382,47 +493,36 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   font-family:var(--display);
   font-size:14px;
   color:var(--ocre);
-  transition:all .4s;
+  transition:all .4s cubic-bezier(.2,.8,.2,1);
 }
 .step:hover .step-dot{background:var(--ocre);color:var(--charbon);transform:scale(1.15)}
 .step-dot.active{background:var(--ocre);color:var(--charbon);border-color:var(--ocre)}
-.step-name{
-  font-family:var(--display);
-  font-size:14px;
-  color:var(--ivoire);
-  margin-bottom:4px;
-}
-.step-dur{
-  font-size:11px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--ivoire-mu);
-}
+.step-name{font-family:var(--display);font-size:14px;color:var(--ivoire);margin-bottom:4px}
+.step-dur{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ivoire-mu)}
 
-.offres{
-  display:flex;flex-direction:column;gap:20px;
-  max-width:1100px;margin:0 auto;
-}
+.offres{display:flex;flex-direction:column;gap:24px;max-width:1100px;margin:0 auto}
 .offre{
-  background:var(--charbon-2);
+  background:rgba(26,20,16,.7);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
   border:1px solid var(--ivoire-fd);
-  border-radius:8px;
-  padding:48px 40px;
+  border-radius:10px;
+  padding:48px 44px;
   position:relative;
   overflow:hidden;
-  transition:border-color .4s,transform .5s;
+  transition:border-color .4s,transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s;
 }
-.offre:hover{border-color:var(--ocre);transform:translateY(-4px)}
+.offre:hover{border-color:var(--ocre);transform:translateY(-4px);box-shadow:0 30px 80px -20px rgba(200,149,109,.18)}
 .offre.featured{
   border-color:var(--ocre);
-  background:linear-gradient(135deg,var(--charbon-2),var(--charbon-3));
+  background:linear-gradient(135deg,rgba(26,20,16,.7),rgba(58,28,20,.6));
 }
 .offre-pill{
-  position:absolute;top:20px;right:24px;
+  position:absolute;top:24px;right:32px;
   font-size:9.5px;font-weight:700;
   letter-spacing:.22em;text-transform:uppercase;
   color:var(--charbon);background:var(--ocre);
-  padding:5px 12px;border-radius:100px;
+  padding:5px 12px;border-radius:100px;z-index:3;
 }
 .offre-top{
   display:flex;justify-content:space-between;align-items:flex-start;
@@ -430,50 +530,22 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   border-bottom:1px solid var(--ivoire-fd);
   flex-wrap:wrap;
 }
-.offre-meta{
-  font-size:10.5px;font-weight:600;
-  letter-spacing:.22em;text-transform:uppercase;
-  color:var(--ocre);margin-bottom:12px;
-}
-.offre-name{
-  font-family:var(--display);font-weight:300;
-  font-size:clamp(34px,4vw,56px);
-  letter-spacing:-.025em;
-  line-height:1;margin-bottom:8px;
-}
-.offre-tag{
-  font-family:var(--italic);font-style:italic;
-  font-size:clamp(15px,1.3vw,18px);
-  color:var(--ivoire-mu);
-}
+.offre-meta{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ocre);margin-bottom:12px}
+.offre-name{font-family:var(--display);font-weight:300;font-size:clamp(34px,4vw,56px);letter-spacing:-.025em;line-height:1;margin-bottom:8px}
+.offre-tag{font-family:var(--italic);font-style:italic;font-size:clamp(15px,1.3vw,18px);color:var(--ivoire-mu)}
 .offre-price{text-align:right;flex-shrink:0;min-width:180px}
-.offre-price-val{
-  font-family:var(--display);font-weight:300;
-  font-size:clamp(30px,3.2vw,46px);
-  color:var(--ocre);line-height:1;margin-bottom:5px;
-  letter-spacing:-.02em;
-}
+.offre-price-val{font-family:var(--display);font-weight:300;font-size:clamp(30px,3.2vw,46px);color:var(--ocre);line-height:1;margin-bottom:5px;letter-spacing:-.02em}
 .offre-price-sub{font-size:11.5px;color:var(--ivoire-mu);letter-spacing:.04em}
 
-.offre-grid{
-  display:grid;grid-template-columns:1fr 1fr 1fr;
-  gap:36px;margin-bottom:28px;
-}
-.offre-block h4{
-  font-size:10.5px;font-weight:600;
-  letter-spacing:.22em;text-transform:uppercase;
-  color:var(--ocre);margin-bottom:12px;
-}
-.offre-block p,.offre-block li{
-  font-size:13.5px;line-height:1.65;
-  color:var(--ivoire-mu);
-}
+.offre-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:36px;margin-bottom:28px}
+.offre-block h4{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ocre);margin-bottom:12px}
+.offre-block p,.offre-block li{font-size:13.5px;line-height:1.65;color:var(--ivoire-mu)}
 .offre-block ul{list-style:none}
 .offre-block li{position:relative;padding-left:16px;margin-bottom:6px}
 .offre-block li::before{content:'◇';position:absolute;left:0;top:0;color:var(--ocre);font-size:10px}
 
 .offre-results{
-  background:rgba(200,149,109,.06);
+  background:rgba(200,149,109,.08);
   border-left:2px solid var(--ocre);
   padding:20px 24px;
   margin-bottom:28px;
@@ -490,15 +562,9 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   font-size:14px;line-height:1.55;color:var(--ivoire);
   margin-bottom:8px;
 }
-.offre-results li::before{
-  content:'';position:absolute;left:0;top:9px;
-  width:14px;height:1px;background:var(--ocre);
-}
+.offre-results li::before{content:'';position:absolute;left:0;top:9px;width:14px;height:1px;background:var(--ocre)}
 
-.offre-foot{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:20px;flex-wrap:wrap;
-}
+.offre-foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
 .offre-tags{display:flex;gap:6px;flex-wrap:wrap}
 .offre-tag-pill{
   font-size:11px;font-weight:500;
@@ -516,101 +582,58 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 }
 
 /* ============================================
-   PAGE VIII — Le Premier Pas (Call)
+   CALL — Le Premier Pas
    ============================================ */
-.page-8{
+.scene-call{
+  padding:25vh var(--pad);
   background:linear-gradient(135deg,var(--ocre) 0%,var(--terre) 100%);
   color:var(--charbon);
   text-align:center;
-  align-items:center;
-  justify-content:center;
+  position:relative;
+  overflow:hidden;
 }
-.page-8::before{
+.scene-call::before{
   content:'';
   position:absolute;inset:0;
   background-image:radial-gradient(circle at 1px 1px,rgba(15,10,7,.16) 1px,transparent 0);
   background-size:36px 36px;
   pointer-events:none;
 }
-.page-8 .page-num{color:var(--charbon)}
-.page-8 .page-num::before{background:var(--charbon)}
-.page-8 h2{font-size:clamp(56px,8vw,128px);margin-bottom:32px;color:var(--charbon);line-height:.95}
-.page-8 h2 em.it{display:block;color:var(--charbon);font-family:var(--italic)}
-.page-8 p{
-  font-size:clamp(17px,1.4vw,22px);
-  line-height:1.55;color:rgba(15,10,7,.8);
-  max-width:560px;margin:0 auto 56px;
-}
-.call-stats{
-  display:flex;gap:80px;justify-content:center;
-  margin-bottom:64px;flex-wrap:wrap;
-}
-.call-stat-val{
-  font-family:var(--display);font-weight:300;
-  font-size:clamp(56px,5.6vw,96px);
-  color:var(--charbon);line-height:1;
-  letter-spacing:-.02em;margin-bottom:8px;
-}
-.call-stat-lab{
-  font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--acajou);font-weight:500;
-}
+.scene-call .inner{position:relative;z-index:2;max-width:900px;margin:0 auto}
+.scene-call .eb{color:var(--charbon)}
+.scene-call .eb::before{background:var(--charbon)}
+.scene-call h2{font-size:clamp(56px,8vw,140px);color:var(--charbon);line-height:.95;margin-bottom:40px}
+.scene-call h2 em.it{color:var(--charbon);display:block}
+.scene-call p{font-size:clamp(17px,1.4vw,22px);color:rgba(15,10,7,.8);max-width:560px;margin:0 auto 56px;line-height:1.55}
+.scene-call strong{color:var(--charbon)}
+.call-stats{display:flex;gap:80px;justify-content:center;margin-bottom:64px;flex-wrap:wrap}
+.call-stat-val{font-family:var(--display);font-weight:300;font-size:clamp(56px,5.6vw,96px);color:var(--charbon);line-height:1;letter-spacing:-.02em;margin-bottom:8px}
+.call-stat-lab{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--acajou);font-weight:500}
 
 /* ============================================
-   FOOTER (page IX)
+   FOOTER
    ============================================ */
-.book-end{
-  scroll-snap-align:start;
+footer{
   background:var(--charbon);
   padding:80px var(--pad) 48px;
   border-top:1px solid var(--ivoire-fd);
+  position:relative;
 }
-.foot-inner{
-  max-width:var(--max);margin:0 auto;
-  display:flex;justify-content:space-between;align-items:flex-start;
-  gap:48px;flex-wrap:wrap;
-}
+.foot-inner{max-width:var(--max);margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:48px;flex-wrap:wrap}
 .foot-brand{flex:1;min-width:280px}
-.foot-name{
-  font-family:var(--display);
-  font-size:clamp(28px,3vw,40px);
-  font-weight:400;letter-spacing:.05em;
-  margin-bottom:8px;
-}
-.foot-slogan{
-  font-family:var(--italic);font-style:italic;
-  font-size:clamp(17px,1.5vw,22px);
-  color:var(--ivoire-mu);margin-bottom:24px;
-}
-.foot-words{
-  font-size:13px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--ocre);font-weight:500;
-}
+.foot-name{font-family:var(--display);font-size:clamp(28px,3vw,40px);font-weight:400;letter-spacing:.05em;margin-bottom:8px}
+.foot-slogan{font-family:var(--italic);font-style:italic;font-size:clamp(17px,1.5vw,22px);color:var(--ivoire-mu);margin-bottom:24px}
+.foot-words{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--ocre);font-weight:500}
 .foot-words span{margin:0 14px}
 .foot-words span:first-child{margin-left:0}
 .foot-cols{display:flex;gap:64px;flex-wrap:wrap}
-.foot-col h5{
-  font-size:11px;font-weight:600;
-  letter-spacing:.22em;text-transform:uppercase;
-  color:var(--ivoire);margin-bottom:18px;
-}
-.foot-col a{
-  display:block;font-size:14px;
-  color:var(--ivoire-mu);margin-bottom:10px;
-  transition:color .25s;
-}
+.foot-col h5{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ivoire);margin-bottom:18px}
+.foot-col a{display:block;font-size:14px;color:var(--ivoire-mu);margin-bottom:10px;transition:color .25s}
 .foot-col a:hover{color:var(--ocre)}
-.foot-bottom{
-  max-width:var(--max);margin:64px auto 0;
-  padding-top:32px;border-top:1px solid var(--ivoire-fd);
-  display:flex;justify-content:space-between;
-  flex-wrap:wrap;gap:16px;
-  font-size:12.5px;color:var(--ivoire-mu);
-  letter-spacing:.04em;
-}
+.foot-bottom{max-width:var(--max);margin:64px auto 0;padding-top:32px;border-top:1px solid var(--ivoire-fd);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-size:12.5px;color:var(--ivoire-mu);letter-spacing:.04em}
 
 /* ============================================
-   FIXED CTA — toujours visible
+   FIXED CTA
    ============================================ */
 .cta-fixed{
   position:fixed;
@@ -647,34 +670,6 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 }
 
 /* ============================================
-   SCROLL HINT
-   ============================================ */
-.scroll-hint{
-  position:absolute;
-  bottom:32px;left:50%;
-  transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-  font-size:10px;
-  letter-spacing:.32em;text-transform:uppercase;
-  color:var(--ivoire-mu);
-  opacity:0;
-  animation:rise 1s 2.2s forwards;
-}
-.scroll-hint .line{
-  width:1px;height:48px;
-  background:linear-gradient(180deg,var(--ocre),transparent);
-  animation:scroll-line 2.4s ease-in-out infinite;
-  transform-origin:top;
-}
-@keyframes scroll-line{
-  0%{transform:scaleY(0);transform-origin:top}
-  50%{transform:scaleY(1);transform-origin:top}
-  51%{transform:scaleY(1);transform-origin:bottom}
-  100%{transform:scaleY(0);transform-origin:bottom}
-}
-@media(max-width:900px){.scroll-hint{display:none}}
-
-/* ============================================
    ANIMATIONS
    ============================================ */
 @keyframes hero-line{0%{transform:translateY(105%)}100%{transform:translateY(0)}}
@@ -682,18 +677,14 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 @keyframes cta-rise{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
 
-/* Reveal on scroll — cosmétique */
-.rv{transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1)}
-html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
-.rv.in{opacity:1;transform:translateY(0)}
-.rv-d1{transition-delay:.15s}
-.rv-d2{transition-delay:.3s}
-.rv-d3{transition-delay:.45s}
-
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
-  html{scroll-snap-type:none}
   .h1-mega .line-inner{transform:translateY(0)}
+  .griotte{display:none}
+  .tools-pin{height:auto}
+  .tools-sticky{position:static;height:auto;display:block}
+  .tools-track{flex-direction:column;transform:none !important}
+  .tool-slide{width:100%;height:auto;min-height:80vh}
 }
 
 ::selection{background:var(--ocre);color:var(--charbon)}
@@ -702,22 +693,21 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
 </head>
 <body>
 
-<!-- Brand mark -->
-<div class="book-brand"><span class="lozenge"></span> Djeli</div>
+<!-- Background flow -->
+<div class="bg-flow"></div>
 
-<!-- Page counter -->
-<div class="book-counter">
-  <span>Page</span>
-  <span class="num" id="page-num">I</span>
-  <span>/ IX</span>
-</div>
+<!-- Brand -->
+<div class="brand"><span class="lozenge"></span> Djeli</div>
+
+<!-- Scroll progress bar -->
+<div class="scroll-progress" aria-hidden="true"></div>
 
 <!-- ============================================
-     GRIOTTE STAGE — figures qui morphent
+     GRIOTTE — figures qui crossfade continûment
      ============================================ -->
-<div class="griotte-stage" aria-hidden="true">
+<div class="griotte" aria-hidden="true">
 
-  <!-- I · Visage -->
+  <!-- Visage -->
   <div class="figure" data-figure="visage">
     <svg viewBox="0 0 200 280" fill="none">
       <circle cx="100" cy="80" r="92" fill="url(#g-halo-1)" opacity=".22"/>
@@ -740,7 +730,7 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
     </svg>
   </div>
 
-  <!-- II · Kora -->
+  <!-- Kora -->
   <div class="figure" data-figure="kora">
     <svg viewBox="0 0 200 280" fill="none">
       <ellipse cx="100" cy="180" rx="78" ry="92" fill="url(#g-kora-body)"/>
@@ -748,22 +738,15 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
       <ellipse cx="100" cy="180" rx="58" ry="72" fill="none" stroke="#0F0A07" stroke-width=".5" opacity=".4"/>
       <rect x="95" y="20" width="10" height="100" fill="url(#g-kora-neck)"/>
       <ellipse cx="100" cy="22" rx="14" ry="10" fill="#7A4E3B"/>
-      <!-- 21 cordes -->
       <g stroke="#D4A574" stroke-width=".7" opacity=".75">
-        <line x1="92" y1="40" x2="78" y2="180"/>
-        <line x1="93" y1="40" x2="84" y2="180"/>
-        <line x1="94" y1="40" x2="89" y2="180"/>
-        <line x1="95" y1="40" x2="94" y2="180"/>
-        <line x1="96" y1="40" x2="99" y2="180"/>
-        <line x1="97" y1="40" x2="103" y2="180"/>
-        <line x1="98" y1="40" x2="107" y2="180"/>
-        <line x1="103" y1="40" x2="111" y2="180"/>
-        <line x1="104" y1="40" x2="116" y2="180"/>
-        <line x1="105" y1="40" x2="122" y2="180"/>
+        <line x1="92" y1="40" x2="78" y2="180"/><line x1="93" y1="40" x2="84" y2="180"/>
+        <line x1="94" y1="40" x2="89" y2="180"/><line x1="95" y1="40" x2="94" y2="180"/>
+        <line x1="96" y1="40" x2="99" y2="180"/><line x1="97" y1="40" x2="103" y2="180"/>
+        <line x1="98" y1="40" x2="107" y2="180"/><line x1="103" y1="40" x2="111" y2="180"/>
+        <line x1="104" y1="40" x2="116" y2="180"/><line x1="105" y1="40" x2="122" y2="180"/>
         <line x1="106" y1="40" x2="128" y2="180"/>
       </g>
       <circle cx="100" cy="180" r="5" fill="#C8956D"/>
-      <path d="M100 180 L100 270" stroke="#D4A574" stroke-width=".5" opacity=".5" stroke-dasharray="3 3"/>
       <defs>
         <radialGradient id="g-kora-body" cx=".5" cy=".5"><stop offset="0%" stop-color="#C8956D"/><stop offset="100%" stop-color="#5A3825"/></radialGradient>
         <linearGradient id="g-kora-neck" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7A4E3B"/><stop offset="100%" stop-color="#3D2418"/></linearGradient>
@@ -771,81 +754,53 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
     </svg>
   </div>
 
-  <!-- III · Masque dogon (PNL — structure mentale) -->
+  <!-- Masque -->
   <div class="figure" data-figure="masque">
     <svg viewBox="0 0 200 280" fill="none">
       <path d="M65 30 Q100 20, 135 30 L155 100 L150 220 Q140 250, 100 258 Q60 250, 50 220 L45 100 Z" fill="url(#g-masque)"/>
-      <!-- Yeux losanges -->
       <path d="M75 95 L88 105 L75 115 L62 105 Z" fill="#0F0A07"/>
       <path d="M125 95 L138 105 L125 115 L112 105 Z" fill="#0F0A07"/>
-      <!-- Nez vertical -->
       <rect x="97" y="120" width="6" height="50" fill="#0F0A07"/>
-      <!-- Bouche horizontale -->
       <rect x="80" y="190" width="40" height="6" fill="#0F0A07"/>
-      <!-- Motifs verticaux -->
-      <line x1="55" y1="30" x2="50" y2="220" stroke="#0F0A07" stroke-width=".5" opacity=".4"/>
-      <line x1="145" y1="30" x2="150" y2="220" stroke="#0F0A07" stroke-width=".5" opacity=".4"/>
-      <!-- Triangles décoratifs -->
       <path d="M70 50 L75 55 L70 60 L65 55 Z M85 45 L90 50 L85 55 L80 50 Z M100 40 L105 45 L100 50 L95 45 Z M115 45 L120 50 L115 55 L110 50 Z M130 50 L135 55 L130 60 L125 55 Z" fill="#0F0A07" opacity=".55"/>
-      <!-- Front -->
-      <path d="M75 65 Q100 55, 125 65" stroke="#0F0A07" stroke-width="1" opacity=".5"/>
       <defs>
         <linearGradient id="g-masque" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C9382A"/><stop offset="50%" stop-color="#E89B5C"/><stop offset="100%" stop-color="#8B3A1F"/></linearGradient>
       </defs>
     </svg>
   </div>
 
-  <!-- IV · Bouche/Parole (CNV) -->
+  <!-- Parole -->
   <div class="figure" data-figure="parole">
     <svg viewBox="0 0 200 280" fill="none">
-      <!-- Onde sonore concentrique -->
       <circle cx="100" cy="140" r="120" fill="none" stroke="#0F0A07" stroke-width=".8" opacity=".15"/>
       <circle cx="100" cy="140" r="95" fill="none" stroke="#0F0A07" stroke-width=".8" opacity=".22"/>
       <circle cx="100" cy="140" r="70" fill="none" stroke="#0F0A07" stroke-width=".8" opacity=".3"/>
       <circle cx="100" cy="140" r="48" fill="none" stroke="#0F0A07" stroke-width="1" opacity=".4"/>
-      <!-- Lèvres -->
       <path d="M55 140 Q100 110, 145 140 Q100 175, 55 140 Z" fill="#0F0A07"/>
       <path d="M70 140 Q100 124, 130 140" stroke="#C9382A" stroke-width="2" opacity=".7"/>
-      <!-- Bulle de parole / mots qui sortent -->
       <text x="100" y="80" text-anchor="middle" font-family="Fraunces" font-size="14" font-style="italic" fill="#0F0A07" opacity=".75">parler vrai</text>
       <text x="160" y="120" text-anchor="middle" font-family="Fraunces" font-size="11" font-style="italic" fill="#0F0A07" opacity=".55">s'entendre</text>
       <text x="40" y="180" text-anchor="middle" font-family="Fraunces" font-size="11" font-style="italic" fill="#0F0A07" opacity=".55">enfin</text>
-      <text x="155" y="200" text-anchor="middle" font-family="Fraunces" font-size="10" font-style="italic" fill="#0F0A07" opacity=".4">être</text>
-      <!-- Gouttes / souffle -->
-      <circle cx="158" cy="155" r="3" fill="#0F0A07" opacity=".6"/>
-      <circle cx="42" cy="155" r="3" fill="#0F0A07" opacity=".6"/>
-      <circle cx="100" cy="240" r="2" fill="#0F0A07" opacity=".4"/>
     </svg>
   </div>
 
-  <!-- V · Baobab -->
+  <!-- Baobab -->
   <div class="figure" data-figure="baobab">
     <svg viewBox="0 0 200 280" fill="none">
-      <!-- Sol -->
       <path d="M0 245 Q100 240, 200 245 L200 280 L0 280 Z" fill="#1F3D2D" opacity=".4"/>
-      <!-- Tronc -->
       <path d="M75 245 Q70 200, 78 160 Q72 130, 80 100 Q72 80, 95 75 L105 75 Q128 80, 120 100 Q128 130, 122 160 Q130 200, 125 245 Z" fill="url(#g-baobab-trunk)"/>
-      <!-- Texture tronc -->
       <path d="M85 240 Q83 180, 86 130" stroke="#3D2418" stroke-width="1.5" opacity=".5"/>
       <path d="M115 240 Q117 180, 114 130" stroke="#3D2418" stroke-width="1.5" opacity=".5"/>
-      <!-- Branches étalées -->
       <path d="M80 100 Q60 90, 40 80 Q35 70, 30 60" stroke="#5A3825" stroke-width="6" stroke-linecap="round" fill="none"/>
       <path d="M85 95 Q70 75, 55 50" stroke="#5A3825" stroke-width="5" stroke-linecap="round" fill="none"/>
       <path d="M120 100 Q140 90, 160 80 Q165 70, 170 60" stroke="#5A3825" stroke-width="6" stroke-linecap="round" fill="none"/>
       <path d="M115 95 Q130 75, 145 50" stroke="#5A3825" stroke-width="5" stroke-linecap="round" fill="none"/>
       <path d="M100 75 L100 30" stroke="#5A3825" stroke-width="5" stroke-linecap="round"/>
-      <!-- Petites branches -->
-      <path d="M40 80 L30 75" stroke="#5A3825" stroke-width="2" stroke-linecap="round"/>
-      <path d="M160 80 L170 75" stroke="#5A3825" stroke-width="2" stroke-linecap="round"/>
-      <path d="M55 50 L48 42" stroke="#5A3825" stroke-width="2" stroke-linecap="round"/>
-      <path d="M145 50 L152 42" stroke="#5A3825" stroke-width="2" stroke-linecap="round"/>
-      <!-- Petits points feuilles -->
       <circle cx="30" cy="60" r="3" fill="#1F5E4E" opacity=".7"/>
       <circle cx="55" cy="50" r="2.5" fill="#1F5E4E" opacity=".7"/>
       <circle cx="170" cy="60" r="3" fill="#1F5E4E" opacity=".7"/>
       <circle cx="145" cy="50" r="2.5" fill="#1F5E4E" opacity=".7"/>
       <circle cx="100" cy="30" r="3" fill="#1F5E4E" opacity=".7"/>
-      <!-- Halo terre -->
       <ellipse cx="100" cy="245" rx="80" ry="6" fill="#0F0A07" opacity=".5"/>
       <defs>
         <linearGradient id="g-baobab-trunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5A3825"/><stop offset="50%" stop-color="#7A4E3B"/><stop offset="100%" stop-color="#3D2418"/></linearGradient>
@@ -853,25 +808,17 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
     </svg>
   </div>
 
-  <!-- VI · Oiseau Sankofa -->
+  <!-- Oiseau Sankofa -->
   <div class="figure" data-figure="oiseau">
     <svg viewBox="0 0 200 280" fill="none">
-      <!-- Lignes mouvantes (envol) -->
       <path d="M20 250 Q100 220, 180 200" stroke="#E8B73C" stroke-width="1" opacity=".4" stroke-dasharray="4 4"/>
       <path d="M30 240 Q100 210, 170 190" stroke="#E8B73C" stroke-width="1" opacity=".25" stroke-dasharray="3 3"/>
-      <!-- Corps oiseau (silhouette élégante en vol) -->
       <path d="M55 130 Q40 120, 35 100 Q45 95, 70 100 Q90 90, 110 95 Q130 75, 150 70 Q170 80, 175 110 Q165 125, 145 130 Q130 150, 110 145 Q90 165, 70 155 Q55 145, 55 130 Z" fill="url(#g-oiseau)"/>
-      <!-- Aile dépliée -->
       <path d="M110 95 Q120 70, 100 40 Q90 50, 95 75 Q92 85, 110 95 Z" fill="#8B3A1F"/>
       <path d="M125 100 Q140 80, 130 50 Q120 65, 125 85" fill="#C9382A" opacity=".8"/>
-      <!-- Tête tournée vers l'arrière (sankofa) -->
       <path d="M150 70 Q165 55, 175 65 Q180 75, 175 85 Q170 90, 160 88 Z" fill="#C9382A"/>
       <circle cx="170" cy="73" r="2" fill="#0F0A07"/>
       <path d="M178 75 L188 73 L186 78 Z" fill="#E8B73C"/>
-      <!-- Pattes -->
-      <path d="M100 145 L98 175" stroke="#0F0A07" stroke-width="1.5"/>
-      <path d="M115 145 L113 175" stroke="#0F0A07" stroke-width="1.5"/>
-      <!-- Étoile au-dessus (objectif) -->
       <path d="M40 30 L43 38 L51 38 L45 43 L47 51 L40 47 L33 51 L35 43 L29 38 L37 38 Z" fill="#E8B73C" opacity=".85"/>
       <defs>
         <linearGradient id="g-oiseau" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E8B73C"/><stop offset="100%" stop-color="#C9382A"/></linearGradient>
@@ -879,48 +826,10 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
     </svg>
   </div>
 
-  <!-- VII · Fil tissé -->
-  <div class="figure" data-figure="fil">
-    <svg viewBox="0 0 200 280" fill="none">
-      <!-- Bandes verticales (chaîne) -->
-      <rect x="40" y="10" width="3" height="260" fill="#C8956D" opacity=".7"/>
-      <rect x="60" y="10" width="3" height="260" fill="#C9382A" opacity=".7"/>
-      <rect x="80" y="10" width="3" height="260" fill="#E8B73C" opacity=".7"/>
-      <rect x="100" y="10" width="3" height="260" fill="#1F5E4E" opacity=".7"/>
-      <rect x="120" y="10" width="3" height="260" fill="#3B4F8C" opacity=".7"/>
-      <rect x="140" y="10" width="3" height="260" fill="#D4A574" opacity=".7"/>
-      <rect x="160" y="10" width="3" height="260" fill="#7A4E3B" opacity=".7"/>
-      <!-- Bandes horizontales (trame) -->
-      <g opacity=".7">
-        <rect x="30" y="50" width="140" height="3" fill="#E8B73C"/>
-        <rect x="30" y="80" width="140" height="3" fill="#1F5E4E"/>
-        <rect x="30" y="110" width="140" height="3" fill="#C9382A"/>
-        <rect x="30" y="140" width="140" height="3" fill="#D4A574"/>
-        <rect x="30" y="170" width="140" height="3" fill="#3B4F8C"/>
-        <rect x="30" y="200" width="140" height="3" fill="#C8956D"/>
-        <rect x="30" y="230" width="140" height="3" fill="#7A4E3B"/>
-      </g>
-      <!-- Motifs losanges -->
-      <g opacity=".85">
-        <path d="M50 40 L57 50 L50 60 L43 50 Z" fill="#0F0A07"/>
-        <path d="M90 40 L97 50 L90 60 L83 50 Z" fill="#0F0A07"/>
-        <path d="M130 40 L137 50 L130 60 L123 50 Z" fill="#0F0A07"/>
-        <path d="M70 95 L77 105 L70 115 L63 105 Z" fill="#0F0A07"/>
-        <path d="M110 95 L117 105 L110 115 L103 105 Z" fill="#0F0A07"/>
-        <path d="M150 95 L157 105 L150 115 L143 105 Z" fill="#0F0A07"/>
-        <path d="M50 215 L57 225 L50 235 L43 225 Z" fill="#0F0A07"/>
-        <path d="M90 215 L97 225 L90 235 L83 225 Z" fill="#0F0A07"/>
-        <path d="M130 215 L137 225 L130 235 L123 225 Z" fill="#0F0A07"/>
-      </g>
-    </svg>
-  </div>
-
-  <!-- VIII · Étoile / Soleil mandingue -->
+  <!-- Étoile soleil -->
   <div class="figure" data-figure="etoile">
     <svg viewBox="0 0 200 280">
-      <!-- Halo doré -->
       <circle cx="100" cy="140" r="120" fill="url(#g-halo-8)" opacity=".25"/>
-      <!-- Soleil 12 branches -->
       <g transform="translate(100,140)">
         <g fill="#0F0A07">
           <path d="M0 -90 L8 -50 L-8 -50 Z"/>
@@ -933,17 +842,9 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
             <path d="M-90 0 L-50 8 L-50 -8 Z"/>
             <path d="M90 0 L50 8 L50 -8 Z"/>
           </g>
-          <g transform="rotate(22.5)">
-            <path d="M0 -75 L5 -45 L-5 -45 Z" opacity=".7"/>
-            <path d="M0 75 L5 45 L-5 45 Z" opacity=".7"/>
-            <path d="M-75 0 L-45 5 L-45 -5 Z" opacity=".7"/>
-            <path d="M75 0 L45 5 L45 -5 Z" opacity=".7"/>
-          </g>
         </g>
-        <!-- Cercle central -->
         <circle r="42" fill="url(#g-soleil)"/>
         <circle r="42" fill="none" stroke="#0F0A07" stroke-width="1.5"/>
-        <!-- Visage soleil minimal -->
         <circle cx="-12" cy="-6" r="2.5" fill="#0F0A07"/>
         <circle cx="12" cy="-6" r="2.5" fill="#0F0A07"/>
         <path d="M-14 12 Q0 22, 14 12" stroke="#0F0A07" stroke-width="2" fill="none" stroke-linecap="round"/>
@@ -958,83 +859,90 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
 </div>
 
 <!-- ============================================
-     PAGES — Le Livre Rituel
+     CONTENT
      ============================================ -->
 
-<!-- PAGE I — L'Ouverture -->
-<section class="page page-1" data-page="1" data-griotte="visage" data-num="I" data-title="L'Ouverture">
-  <div class="page-content">
-    <div class="badge-csp"><span style="width:6px;height:6px;background:var(--ocre);border-radius:50%;animation:pulse 2s infinite"></span> Pour les femmes qui jouent grand</div>
-    <h1 class="h1-mega">
-      <span class="line"><span class="line-inner">Je te ramène</span></span>
-      <span class="line"><span class="line-inner">à <em class="it">ta propre</em></span></span>
-      <span class="line"><span class="line-inner"><em class="it">histoire.</em></span></span>
-    </h1>
-    <p class="lead">Parce que la femme que tu es devenue a parfois oublié l'histoire de celle qu'elle a toujours été.</p>
+<!-- Hero -->
+<section class="scene hero" data-scene-griotte="visage">
+  <div class="hero-eyebrow">
+    <span class="dot"></span>
+    Pour les femmes qui jouent grand
   </div>
-  <div class="scroll-hint"><span>Tourner la page</span><div class="line"></div></div>
+  <h1 class="h1-mega">
+    <span class="line"><span class="line-inner">Je te ramène</span></span>
+    <span class="line"><span class="line-inner">à <em class="it">ta propre</em></span></span>
+    <span class="line"><span class="line-inner"><em class="it">histoire.</em></span></span>
+  </h1>
+  <p class="hero-lead">Parce que la femme que tu es devenue a parfois oublié l'histoire de celle qu'elle a toujours été.</p>
+  <div class="scroll-hint"><span>Le voyage commence</span><div class="line"></div></div>
 </section>
 
-<!-- PAGE II — La Voix -->
-<section class="page page-2" data-page="2" data-griotte="kora" data-num="II" data-title="La Voix">
-  <div class="page-content">
-    <div class="page-num"><em class="page-roman">II</em> · La Voix</div>
-    <div class="accent-rule"></div>
-    <h2 class="h2-page">Pas une coach<br>comme les autres.<br><em class="it">Une griotte du XXIe siècle.</em></h2>
-    <p>Dans la tradition mandingue, le <strong>Djeli</strong> est le gardien de la mémoire, la voix qui dit ce que les autres taisent, le passeur entre ce qui fut et ce qui peut être.</p>
-    <p>Coach certifiée, formée à la <strong>PNL et à la Communication Non Violente</strong> — et griotte dans l'âme. Mes clientes sont <strong>cadres, entrepreneuses, indépendantes, professions libérales.</strong> Des femmes intelligentes qui viennent non pour apprendre, mais pour <em class="it">s'autoriser enfin à être entièrement elles-mêmes.</em></p>
-  </div>
+<!-- Voix (about) -->
+<section class="scene-about" data-scene-griotte="kora">
+  <span class="eb">II · La Voix</span>
+  <h2 class="h2-mega split">Pas une coach<br>comme les autres.<br><em class="it">Une griotte du XXIe siècle.</em></h2>
+  <p>Dans la tradition mandingue, le <strong>Djeli</strong> est le gardien de la mémoire, la voix qui dit ce que les autres taisent, le passeur entre ce qui fut et ce qui peut être.</p>
+  <p>Coach certifiée, formée à la <strong>PNL et à la Communication Non Violente</strong> — et griotte dans l'âme. Mes clientes sont <strong>cadres, entrepreneuses, indépendantes, professions libérales.</strong> Des femmes intelligentes qui viennent non pour apprendre, mais pour <em class="it">s'autoriser enfin à être entièrement elles-mêmes.</em></p>
+
+  <svg class="deco-line" style="top:0;right:5%;width:120px;height:300px" viewBox="0 0 120 300">
+    <path d="M60 0 Q90 80, 60 150 Q30 220, 60 300"/>
+  </svg>
 </section>
 
-<!-- PAGE III — La Mémoire (PNL) -->
-<section class="page page-3" data-page="3" data-griotte="masque" data-num="III" data-title="La Mémoire">
-  <div class="page-content">
-    <div class="page-num"><em class="page-roman">III</em> · L'Outil de la Mémoire</div>
-    <div class="tool-meta">Programmation Neuro-Linguistique</div>
-    <h2 class="tool-h2">Reprogrammer<br>le <em class="it">récit intérieur.</em></h2>
-    <p class="lead-tool">La PNL est l'art de décoder la structure profonde de vos pensées, croyances et comportements. Ensemble, nous identifions les schémas inconscients qui vous freinent — <strong class="accent">syndrome de l'imposteur, sabotage, peur du succès</strong> — et nous les reprogrammons à la racine, pas en surface.</p>
-    <p class="tool-quote">Vos résultats changent parce que vous changez.</p>
+<!-- Outils — horizontal pinning -->
+<div class="tools-pin" data-tools-pin>
+  <div class="tools-sticky">
+    <div class="tools-track" data-tools-track>
+
+      <div class="tool-slide slide-pnl" data-scene-griotte="masque">
+        <div class="tool-slide-inner">
+          <div class="tool-num"><em>I.</em> L'Outil de la Mémoire — PNL</div>
+          <h2 class="tool-h2">Reprogrammer<br>le <em class="it">récit intérieur.</em></h2>
+          <p>La <strong>Programmation Neuro-Linguistique</strong> est l'art de décoder la structure profonde de vos pensées, croyances et comportements. Ensemble, nous identifions les schémas inconscients qui vous freinent — <span class="accent">syndrome de l'imposteur, sabotage, peur du succès</span> — et nous les reprogrammons à la racine.</p>
+          <p class="tool-quote">Vos résultats changent parce que vous changez.</p>
+        </div>
+      </div>
+
+      <div class="tool-slide slide-cnv" data-scene-griotte="parole">
+        <div class="tool-slide-inner">
+          <div class="tool-num"><em>II.</em> L'Outil de la Parole — CNV</div>
+          <h2 class="tool-h2">Parler vrai,<br>s'<em class="it">entendre</em> enfin.</h2>
+          <p>La <strong>Communication Non Violente de Marshall Rosenberg</strong> est un chemin vers soi avant d'être un outil de relation. Identifier vos <strong>besoins réels</strong>, nommer vos émotions sans les subir, formuler des demandes claires sans manipulation. Pour les femmes en leadership, la CNV est <strong>une révolution silencieuse</strong>.</p>
+          <p class="tool-quote">On communique avec puissance parce qu'on parle enfin de là où l'on est vraiment.</p>
+        </div>
+      </div>
+
+      <div class="tool-slide slide-djeli" data-scene-griotte="baobab">
+        <div class="tool-slide-inner">
+          <div class="tool-num"><em>III.</em> L'Outil de la Sagesse — Transmission Djeli</div>
+          <h2 class="tool-h2">La sagesse<br>comme <em class="it">boussole.</em></h2>
+          <p>Ce que les formations occidentales n'enseignent pas : <span class="accent">la puissance du récit personnel, la mémoire du corps, l'ancêtre comme ressource intérieure.</span> En tant que griotte, j'apporte une dimension que mes clientes n'ont rencontrée nulle part ailleurs.</p>
+          <p class="tool-quote">Pour aller de l'avant, il faut d'abord savoir d'où l'on vient.</p>
+        </div>
+      </div>
+
+    </div>
   </div>
+</div>
+
+<!-- Femme -->
+<section class="scene-femme" data-scene-griotte="oiseau">
+  <span class="eb">VI · L'Envol</span>
+  <h2 class="h2-mega">Pour les femmes<br>qui <em class="it">jouent grand.</em></h2>
+  <p>Vous êtes <strong class="accent">CSP+, cadre, dirigeante, entrepreneuse, indépendante.</strong> Vous avez déjà beaucoup accompli. Pourtant quelque chose résiste — une fatigue qui ne passe pas, une ambition qui étouffe, une relation à vous-même qui mérite d'être réécrite.</p>
+  <p style="font-family:var(--italic);font-style:italic;font-size:clamp(20px,2vw,28px);line-height:1.5;margin-top:36px;padding-left:24px;border-left:2px solid var(--jaune-mali);max-width:640px;color:var(--ivoire)">Un espace à la hauteur de votre intelligence, de votre complexité et de votre puissance.</p>
+
+  <svg class="deco-line" style="bottom:5%;left:5%;width:200px;height:120px" viewBox="0 0 200 120">
+    <path d="M0 60 Q50 0, 100 60 Q150 120, 200 60"/>
+  </svg>
 </section>
 
-<!-- PAGE IV — La Parole (CNV) -->
-<section class="page page-4" data-page="4" data-griotte="parole" data-num="IV" data-title="La Parole">
-  <div class="page-content">
-    <div class="page-num"><em class="page-roman">IV</em> · L'Outil de la Parole</div>
-    <div class="tool-meta">Communication Non Violente · Marshall Rosenberg</div>
-    <h2 class="tool-h2">Parler vrai,<br>s'<em class="it">entendre</em> enfin.</h2>
-    <p class="lead-tool">La CNV est un chemin vers soi avant d'être un outil de relation. Identifier vos <strong>besoins réels</strong>, nommer vos émotions sans les subir, formuler des demandes claires sans manipulation. Pour les femmes en leadership, la CNV est <strong>une révolution silencieuse</strong>.</p>
-    <p class="tool-quote">On communique avec puissance parce qu'on parle enfin de là où l'on est vraiment.</p>
-  </div>
-</section>
-
-<!-- PAGE V — La Sagesse (Djeli) -->
-<section class="page page-5" data-page="5" data-griotte="baobab" data-num="V" data-title="La Sagesse">
-  <div class="page-content">
-    <div class="page-num"><em class="page-roman">V</em> · L'Outil de la Sagesse</div>
-    <div class="tool-meta">Transmission Djeli · Tradition mandingue</div>
-    <h2 class="tool-h2">La sagesse<br>comme <em class="it">boussole.</em></h2>
-    <p class="lead-tool">Ce que les formations occidentales n'enseignent pas : <strong class="accent">la puissance du récit personnel, la mémoire du corps, l'ancêtre comme ressource intérieure.</strong> En tant que griotte, j'apporte une dimension que mes clientes n'ont rencontrée nulle part ailleurs.</p>
-    <p class="tool-quote">Pour aller de l'avant, il faut d'abord savoir d'où l'on vient.</p>
-  </div>
-</section>
-
-<!-- PAGE VI — La Femme -->
-<section class="page page-6" data-page="6" data-griotte="oiseau" data-num="VI" data-title="L'Envol">
-  <div class="page-content">
-    <div class="page-num"><em class="page-roman">VI</em> · L'Envol</div>
-    <h2 class="tool-h2">Pour les femmes<br>qui <em class="it">jouent grand.</em></h2>
-    <p class="lead-tool">Vous êtes <strong class="accent">CSP+, cadre, dirigeante, entrepreneuse, indépendante.</strong> Vous avez déjà beaucoup accompli. Pourtant quelque chose résiste — une fatigue qui ne passe pas, une ambition qui étouffe, une relation à vous-même qui mérite d'être réécrite.</p>
-    <p class="tool-quote">Un espace à la hauteur de votre intelligence, de votre complexité et de votre puissance.</p>
-  </div>
-</section>
-
-<!-- PAGE VII — Le Parcours -->
-<section class="page page-7" data-page="7" data-griotte="fil" data-num="VII" data-title="Le Parcours">
-  <div class="page-7-header">
-    <div class="page-num"><em class="page-roman">VII</em> · Le Parcours</div>
-    <h2 class="tool-h2">Chaque femme a<br>son <em class="it">propre rythme</em><br>de transformation.</h2>
-    <p class="lead-tool" style="margin-top:24px">Ces offres ne sont pas des forfaits. Ce sont des rituels de passage — choisis selon où vous en êtes et jusqu'où vous souhaitez aller.</p>
+<!-- Parcours -->
+<section class="scene-parcours" data-scene-griotte="fil">
+  <div class="scene-parcours-header">
+    <span class="eb">VII · Le Parcours</span>
+    <h2 class="h2-mega">Chaque femme a<br>son <em class="it">propre rythme</em><br>de transformation.</h2>
+    <p>Ces offres ne sont pas des forfaits. Ce sont des rituels de passage — choisis selon où vous en êtes et jusqu'où vous souhaitez aller.</p>
   </div>
 
   <div class="parcours-steps">
@@ -1059,23 +967,9 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
         </div>
       </div>
       <div class="offre-grid">
-        <div class="offre-block">
-          <h4>Pour qui</h4>
-          <p>La femme au carrefour d'une décision, qui sent qu'elle sait déjà mais n'arrive pas à s'entendre. L'entrepreneuse, la cadre, l'indépendante qui a besoin d'une boussole — maintenant.</p>
-        </div>
-        <div class="offre-block">
-          <h4>Les maux</h4>
-          <ul>
-            <li>Décision bloquée</li>
-            <li>Doute paralysant</li>
-            <li>Besoin urgent d'une perspective extérieure</li>
-            <li>Clarté à retrouver avant une prise de position</li>
-          </ul>
-        </div>
-        <div class="offre-block">
-          <h4>Ce avec quoi vous repartez</h4>
-          <p>Un axe clair, une décision ancrée, et les premiers outils PNL pour continuer à travailler seule sur le chemin.</p>
-        </div>
+        <div class="offre-block"><h4>Pour qui</h4><p>La femme au carrefour d'une décision, qui sent qu'elle sait déjà mais n'arrive pas à s'entendre. L'entrepreneuse, la cadre, l'indépendante qui a besoin d'une boussole — maintenant.</p></div>
+        <div class="offre-block"><h4>Les maux</h4><ul><li>Décision bloquée</li><li>Doute paralysant</li><li>Besoin urgent d'une perspective extérieure</li><li>Clarté à retrouver avant une prise de position</li></ul></div>
+        <div class="offre-block"><h4>Ce avec quoi vous repartez</h4><p>Un axe clair, une décision ancrée, et les premiers outils PNL pour continuer à travailler seule sur le chemin.</p></div>
       </div>
       <div class="offre-results">
         <h4>Résultats concrets</h4>
@@ -1108,24 +1002,9 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
         </div>
       </div>
       <div class="offre-grid">
-        <div class="offre-block">
-          <h4>Pour qui</h4>
-          <p>La femme qui sait ce qu'elle veut mais qui se sabote. Celle qui réussit en surface mais ressent un vide persistant, une tension intérieure ou une fatigue du rôle qu'elle joue depuis trop longtemps.</p>
-        </div>
-        <div class="offre-block">
-          <h4>Les maux</h4>
-          <ul>
-            <li>Syndrome de l'imposteur</li>
-            <li>Confiance profonde fragilisée</li>
-            <li>Communication difficile</li>
-            <li>Épuisement du masque</li>
-            <li>Peur de prendre de la place</li>
-          </ul>
-        </div>
-        <div class="offre-block">
-          <h4>Ce avec quoi vous repartez</h4>
-          <p>Une relation à vous-même transformée. Des outils PNL intégrés pour la durée. Une capacité nouvelle à nommer vos besoins — et à les honorer.</p>
-        </div>
+        <div class="offre-block"><h4>Pour qui</h4><p>La femme qui sait ce qu'elle veut mais qui se sabote. Celle qui réussit en surface mais ressent un vide persistant, une tension intérieure ou une fatigue du rôle qu'elle joue depuis trop longtemps.</p></div>
+        <div class="offre-block"><h4>Les maux</h4><ul><li>Syndrome de l'imposteur</li><li>Confiance profonde fragilisée</li><li>Communication difficile</li><li>Épuisement du masque</li><li>Peur de prendre de la place</li></ul></div>
+        <div class="offre-block"><h4>Ce avec quoi vous repartez</h4><p>Une relation à vous-même transformée. Des outils PNL intégrés pour la durée. Une capacité nouvelle à nommer vos besoins — et à les honorer.</p></div>
       </div>
       <div class="offre-results">
         <h4>Résultats concrets</h4>
@@ -1159,24 +1038,9 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
         </div>
       </div>
       <div class="offre-grid">
-        <div class="offre-block">
-          <h4>Pour qui</h4>
-          <p>La femme prête pour une transformation en profondeur. La cadre qui monte, l'entrepreneuse en transition, l'indépendante qui veut passer à un autre niveau de leadership et d'authenticité.</p>
-        </div>
-        <div class="offre-block">
-          <h4>Les maux</h4>
-          <ul>
-            <li>Leadership flou ou imposé</li>
-            <li>Relations professionnelles tendues</li>
-            <li>Identité à reconstruire après une rupture</li>
-            <li>Burnout latent</li>
-            <li>Ambition qui étouffe au lieu de porter</li>
-          </ul>
-        </div>
-        <div class="offre-block">
-          <h4>Ce avec quoi vous repartez</h4>
-          <p>Une identité de leader entièrement alignée. Un leadership qui vient de l'intérieur. Une voix — au sens propre comme au figuré — que vous n'avez plus peur d'utiliser.</p>
-        </div>
+        <div class="offre-block"><h4>Pour qui</h4><p>La femme prête pour une transformation en profondeur. La cadre qui monte, l'entrepreneuse en transition, l'indépendante qui veut passer à un autre niveau de leadership et d'authenticité.</p></div>
+        <div class="offre-block"><h4>Les maux</h4><ul><li>Leadership flou ou imposé</li><li>Relations professionnelles tendues</li><li>Identité à reconstruire après une rupture</li><li>Burnout latent</li><li>Ambition qui étouffe au lieu de porter</li></ul></div>
+        <div class="offre-block"><h4>Ce avec quoi vous repartez</h4><p>Une identité de leader entièrement alignée. Un leadership qui vient de l'intérieur. Une voix — au sens propre comme au figuré — que vous n'avez plus peur d'utiliser.</p></div>
       </div>
       <div class="offre-results">
         <h4>Résultats concrets</h4>
@@ -1211,23 +1075,9 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
         </div>
       </div>
       <div class="offre-grid">
-        <div class="offre-block">
-          <h4>Pour qui</h4>
-          <p>La femme qui joue en Ligue 1 de sa propre vie. Dirigeante, fondatrice, leader d'influence qui veut une présence stratégique, profonde et pleinement incarnée — sur la durée.</p>
-        </div>
-        <div class="offre-block">
-          <h4>Les maux</h4>
-          <ul>
-            <li>Solitude du sommet</li>
-            <li>Perte de sens malgré les résultats</li>
-            <li>Corps et âme qui ne suivent plus</li>
-            <li>Besoin d'un espace confidentiel exigeant</li>
-          </ul>
-        </div>
-        <div class="offre-block">
-          <h4>Ce avec quoi vous repartez</h4>
-          <p>Un système de vie et de leadership entièrement aligné. Un rapport au temps, à l'ambition, au corps, aux autres — réinventé à votre image. Des transformations pérennisées.</p>
-        </div>
+        <div class="offre-block"><h4>Pour qui</h4><p>La femme qui joue en Ligue 1 de sa propre vie. Dirigeante, fondatrice, leader d'influence qui veut une présence stratégique, profonde et pleinement incarnée — sur la durée.</p></div>
+        <div class="offre-block"><h4>Les maux</h4><ul><li>Solitude du sommet</li><li>Perte de sens malgré les résultats</li><li>Corps et âme qui ne suivent plus</li><li>Besoin d'un espace confidentiel exigeant</li></ul></div>
+        <div class="offre-block"><h4>Ce avec quoi vous repartez</h4><p>Un système de vie et de leadership entièrement aligné. Un rapport au temps, à l'ambition, au corps, aux autres — réinventé à votre image. Des transformations pérennisées.</p></div>
       </div>
       <div class="offre-results">
         <h4>Résultats concrets</h4>
@@ -1252,10 +1102,10 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
   </div>
 </section>
 
-<!-- PAGE VIII — Le Premier Pas -->
-<section class="page page-8" data-page="8" data-griotte="etoile" data-num="VIII" data-title="Le Premier Pas">
-  <div class="page-content" style="text-align:center;max-width:900px;margin:0 auto">
-    <div class="page-num" style="justify-content:center"><em class="page-roman">VIII</em> · Le Premier Pas</div>
+<!-- Call -->
+<section class="scene-call" id="call" data-scene-griotte="etoile">
+  <div class="inner">
+    <span class="eb">VIII · Le Premier Pas</span>
     <h2>Le Call<br><em class="it">Découverte.</em></h2>
     <p>Avant tout engagement, une conversation. Pas un pitch. Pas une vente. <strong>Une rencontre</strong> — pour voir si nos énergies résonnent et si Djeli Coaching est fait pour vous.</p>
 
@@ -1276,8 +1126,8 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
   </div>
 </section>
 
-<!-- BOOK END (page IX — footer) -->
-<footer class="book-end" data-page="9" data-griotte="etoile" data-num="IX" data-title="L'Héritage">
+<!-- Footer -->
+<footer>
   <div class="foot-inner">
     <div class="foot-brand">
       <div class="foot-name">DJELI COACHING</div>
@@ -1289,16 +1139,16 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
     <div class="foot-cols">
       <div class="foot-col">
         <h5>Le Parcours</h5>
-        <a href="#page-7">L'Étincelle — 280 €</a>
-        <a href="#page-7">Les Racines — 1 800 €</a>
-        <a href="#page-7">La Forge — 3 400 €</a>
-        <a href="#page-7">Le Djeli — Sur mesure</a>
+        <a href="#">L'Étincelle — 280 €</a>
+        <a href="#">Les Racines — 1 800 €</a>
+        <a href="#">La Forge — 3 400 €</a>
+        <a href="#">Le Djeli — Sur mesure</a>
       </div>
       <div class="foot-col">
         <h5>Découvrir</h5>
-        <a href="#page-2">La Voix</a>
-        <a href="#page-3">Les Outils</a>
-        <a href="#page-8">Le Premier Pas</a>
+        <a href="#">La Voix</a>
+        <a href="#">Les Outils</a>
+        <a href="#call">Le Premier Pas</a>
       </div>
     </div>
   </div>
@@ -1308,10 +1158,7 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
   </div>
 </footer>
 
-<!-- ============================================
-     CTA FIXED
-     ============================================ -->
-<a href="#page-8" class="cta-fixed" id="cta-fixed">
+<a href="#call" class="cta-fixed" id="cta-fixed">
   <span class="pulse"></span>
   Réserver le Call
   <span class="arr">→</span>
@@ -1319,49 +1166,119 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
 
 <script>
 (function(){
-  const ROMAN = ['','I','II','III','IV','V','VI','VII','VIII','IX'];
+  // ============================================
+  // SMOOTH SCROLL — lerp implementation
+  // ============================================
+  const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Avoid wrapping all content for smooth scroll — too invasive. We just animate
+  // the CSS variables based on actual scroll, which is enough to drive the
+  // continuous transformations.
 
-  // Page-driven griotte morphing
+  // ============================================
+  // SCROLL DRIVER — every animation is bound to scrollY
+  // ============================================
   const figures = document.querySelectorAll('.figure');
-  const counterEl = document.getElementById('page-num');
-  const pages = document.querySelectorAll('[data-page]');
+  const scenes = document.querySelectorAll('[data-scene-griotte]');
+  const figureMap = {};
+  figures.forEach(f => { figureMap[f.dataset.figure] = f; });
 
-  function activateFigure(name){
-    figures.forEach(f => f.classList.toggle('active', f.dataset.figure === name));
+  // Tools horizontal pinning
+  const toolsPin = document.querySelector('[data-tools-pin]');
+  const toolsTrack = document.querySelector('[data-tools-track]');
+  const toolSlides = document.querySelectorAll('.tool-slide');
+
+  // Background flow
+  function update(){
+    const scrollY = window.scrollY;
+    const sh = document.documentElement.scrollHeight - window.innerHeight;
+    const p = sh > 0 ? scrollY / sh : 0;
+
+    // Set scroll progress as CSS var (drives bg-flow, lozenge, griotte position)
+    document.documentElement.style.setProperty('--scroll', p.toFixed(4));
+    document.documentElement.style.setProperty('--scroll-px', scrollY + 'px');
+
+    // === GRIOTTE — continuous crossfade based on which scene is currently
+    //   most visible. We compute each scene's "centeredness" and pick top 2
+    //   to crossfade.
+    const vh = window.innerHeight;
+    const center = scrollY + vh / 2;
+    const distances = [];
+    scenes.forEach(s => {
+      const r = s.getBoundingClientRect();
+      const sceneCenter = scrollY + r.top + r.height / 2;
+      const dist = Math.abs(center - sceneCenter);
+      distances.push({figure: s.dataset.sceneGriotte, dist, height: r.height});
+    });
+    // Sort by distance asc
+    distances.sort((a,b) => a.dist - b.dist);
+    // Top two: blend
+    const top = distances[0];
+    const second = distances[1] || top;
+    const totalDist = (top.dist + second.dist) || 1;
+    const wTop = 1 - (top.dist / (top.dist + second.dist || 1));
+    // Set opacity for each figure
+    Object.keys(figureMap).forEach(name => {
+      let opa = 0;
+      if (name === top.figure) opa = Math.max(opa, .95);
+      if (name === second.figure && top.figure !== second.figure) {
+        const blend = top.dist / (top.dist + second.dist) ;
+        opa = Math.max(opa, blend * .6);
+      }
+      figureMap[name].style.opacity = opa.toFixed(3);
+    });
+
+    // === TOOLS HORIZONTAL PINNING
+    if (toolsPin && toolsTrack && toolSlides.length && window.innerWidth > 900) {
+      const pinRect = toolsPin.getBoundingClientRect();
+      const pinTop = pinRect.top;
+      const pinHeight = pinRect.height;
+      const slidesCount = toolSlides.length;
+      const totalScrollDistance = pinHeight - vh; // total vertical scroll inside the pin
+
+      if (pinTop <= 0 && pinTop > -totalScrollDistance) {
+        // We're inside the pin area
+        const localProgress = -pinTop / totalScrollDistance; // 0 → 1
+        const maxX = (slidesCount - 1) * window.innerWidth;
+        const x = localProgress * maxX;
+        toolsTrack.style.transform = 'translateX(' + (-x) + 'px)';
+      } else if (pinTop > 0) {
+        toolsTrack.style.transform = 'translateX(0)';
+      } else {
+        toolsTrack.style.transform = 'translateX(' + (-(slidesCount - 1) * window.innerWidth) + 'px)';
+      }
+    }
   }
 
-  // Initial: visage
-  activateFigure('visage');
-
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const fig = entry.target.dataset.griotte;
-          const num = parseInt(entry.target.dataset.page, 10);
-          if (fig) activateFigure(fig);
-          if (num && counterEl) counterEl.textContent = ROMAN[num] || '';
-        }
-      });
-    }, {threshold: 0.4, rootMargin: '0px 0px -30% 0px'});
-    pages.forEach(p => io.observe(p));
+  // RAF loop
+  let ticking = false;
+  function onScroll(){
+    if (!ticking) {
+      requestAnimationFrame(() => { update(); ticking = false; });
+      ticking = true;
+    }
   }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', update);
+  update();
 
-  // Reveal-on-scroll
+  // ============================================
+  // DECO LINES — draw on scroll
+  // ============================================
   if ('IntersectionObserver' in window) {
-    document.documentElement.classList.add('js-rv');
-    const io2 = new IntersectionObserver(entries => {
+    const ioLines = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in');
-          io2.unobserve(entry.target);
+          ioLines.unobserve(entry.target);
         }
       });
-    }, {threshold: 0.12, rootMargin: '0px 0px -8% 0px'});
-    document.querySelectorAll('.rv').forEach(el => io2.observe(el));
+    }, {threshold: 0.2});
+    document.querySelectorAll('.deco-line').forEach(l => ioLines.observe(l));
   }
 
-  // Smooth scroll
+  // ============================================
+  // SMOOTH SCROLL on anchors
+  // ============================================
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const href = a.getAttribute('href');
@@ -1373,8 +1290,10 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
     });
   });
 
-  // Counters
-  function animateCounter(el, target, suffix) {
+  // ============================================
+  // COUNTERS
+  // ============================================
+  function animateCounter(el, target, suffix){
     const dur = 1800;
     const start = performance.now();
     function frame(now){
@@ -1398,16 +1317,6 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
     }, {threshold: 0.5});
     document.querySelectorAll('[data-counter]').forEach(el => ctIO.observe(el));
   }
-
-  // CTA → mailto placeholder (à swap avec Calendly)
-  document.getElementById('cta-fixed')?.addEventListener('click', e => {
-    if (e.currentTarget.getAttribute('href') === '#page-8') return; // smooth scroll only
-  });
-
-  // Add ID anchors to pages for footer links
-  pages.forEach(p => {
-    if (!p.id) p.id = 'page-' + p.dataset.page;
-  });
 })();
 </script>
 
