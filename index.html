@@ -150,16 +150,17 @@ button{font-family:inherit;background:none;border:none;color:inherit;cursor:poin
 .griotte{
   position:fixed;
   top:50%;
-  right:calc(5vw + (var(--scroll) - .5) * 8vw);
-  width:clamp(220px,28vw,420px);
+  right:calc(2vw + (var(--scroll) - .5) * 5vw);
+  width:clamp(180px,22vw,320px);
   aspect-ratio:1/1.4;
-  z-index:5;
+  z-index:1;  /* DERRIÈRE le contenu marketing */
   pointer-events:none;
   transform:translateY(calc(-50% + (var(--scroll) - .5) * 80px))
-            scale(calc(1 + sin(var(--scroll) * 6.28) * .04))
-            rotate(calc((var(--scroll) - .5) * 12deg));
+            scale(calc(.9 + sin(var(--scroll) * 6.28) * .03))
+            rotate(calc((var(--scroll) - .5) * 8deg));
   filter:drop-shadow(0 24px 48px rgba(0,0,0,.5));
-  transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .5s linear;
+  opacity:.55;  /* plus discrète */
 }
 .figure{
   position:absolute;
@@ -169,6 +170,12 @@ button{font-family:inherit;background:none;border:none;color:inherit;cursor:poin
   transition:opacity .8s cubic-bezier(.2,.8,.2,1);
 }
 .figure svg{width:100%;height:100%}
+
+/* Sections marketing forcent le contenu au-dessus de la griotte */
+.scene,.scene-about,.scene-concret,.scene-femme,.scene-parcours,.scene-call,.scene-process,.scene-faq,.tools-pin,footer{
+  position:relative;
+  z-index:2;
+}
 @media(max-width:900px){.griotte{display:none}}
 
 /* ============================================
@@ -427,6 +434,243 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 
 @media(max-width:1100px){.concret-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.concret-grid{grid-template-columns:1fr}.scene-concret{padding:60px var(--pad) 40px}}
+
+/* ============================================
+   SCARCITY BANDEAU
+   ============================================ */
+.hero-scarcity{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:12.5px;
+  font-weight:500;
+  letter-spacing:.04em;
+  color:var(--ivoire);
+  background:rgba(201,56,42,.12);
+  border:1px solid rgba(201,56,42,.28);
+  padding:8px 16px;
+  border-radius:100px;
+  margin-bottom:32px;
+  opacity:0;
+  animation:rise .9s .25s forwards;
+}
+.scarcity-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--rouge-wax);
+  animation:pulse 2s infinite;
+}
+.hero-scarcity strong{color:var(--rouge-wax);font-weight:700}
+
+/* ============================================
+   PAIN POINTS — "Tu te reconnais ?"
+   ============================================ */
+.scene-pain{
+  padding:30vh var(--pad) 20vh;
+  max-width:var(--max);
+  margin:0 auto;
+}
+.pain-header{max-width:780px;margin-bottom:64px}
+.pain-header h2{
+  font-size:clamp(38px,5.2vw,80px);
+  font-weight:300;
+  line-height:1;
+  letter-spacing:-.025em;
+}
+.pain-header h2 em.it{color:var(--rouge-wax);font-weight:400}
+.pain-header p{
+  font-size:clamp(15px,1.15vw,18px);
+  line-height:1.7;
+  color:var(--ivoire-mu);
+  max-width:600px;
+  margin-top:24px;
+}
+.pain-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  max-width:1000px;
+}
+.pain-item{
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  padding:22px 24px;
+  background:rgba(201,56,42,.04);
+  border:1px solid rgba(201,56,42,.18);
+  border-radius:8px;
+  transition:border-color .3s,background .3s,transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.pain-item:hover{border-color:var(--rouge-wax);background:rgba(201,56,42,.08);transform:translateX(4px)}
+.pain-check{
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(201,56,42,.15);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:12px;color:var(--rouge-wax);
+  margin-top:2px;
+  font-weight:700;
+}
+.pain-item p{
+  font-size:14.5px;line-height:1.55;color:var(--ivoire);
+  margin:0;max-width:none;
+}
+.pain-item strong{color:var(--rouge-wax);font-weight:600}
+.pain-cta{
+  margin-top:48px;
+  font-family:var(--italic);
+  font-style:italic;
+  font-size:clamp(18px,1.6vw,24px);
+  color:var(--ivoire-mu);
+  max-width:680px;
+}
+.pain-cta strong{color:var(--ivoire);font-weight:500}
+@media(max-width:900px){.pain-list{grid-template-columns:1fr}}
+
+/* ============================================
+   PROCESSUS — Comment ça se passe
+   ============================================ */
+.scene-process{
+  padding:25vh var(--pad);
+  max-width:var(--max);
+  margin:0 auto;
+}
+.process-header{margin-bottom:80px;max-width:780px}
+.process-header h2{
+  font-size:clamp(38px,5.2vw,80px);
+  font-weight:300;
+  line-height:1;
+}
+.process-header h2 em.it{color:var(--vert-kente);font-weight:400}
+.process-header p{
+  font-size:clamp(15px,1.15vw,18px);
+  line-height:1.7;
+  color:var(--ivoire-mu);
+  max-width:600px;
+  margin-top:24px;
+}
+.process-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:32px;
+  position:relative;
+}
+.process-grid::before{
+  content:'';
+  position:absolute;
+  top:48px;
+  left:10%;right:10%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--vert-kente),transparent);
+  opacity:.4;
+  z-index:0;
+}
+.process-step{
+  position:relative;
+  z-index:1;
+  background:rgba(31,94,78,.06);
+  border:1px solid rgba(31,94,78,.25);
+  border-radius:12px;
+  padding:48px 32px;
+  transition:border-color .3s,transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.process-step:hover{border-color:var(--vert-kente);transform:translateY(-4px)}
+.process-num{
+  width:60px;height:60px;
+  border-radius:50%;
+  background:var(--vert-kente);
+  color:var(--ivoire);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);
+  font-size:24px;font-weight:300;
+  margin-bottom:28px;
+}
+.process-step h3{
+  font-family:var(--display);
+  font-size:clamp(22px,1.9vw,30px);
+  font-weight:400;
+  letter-spacing:-.02em;
+  line-height:1.1;
+  margin-bottom:16px;
+  color:var(--ivoire);
+}
+.process-step h3 em.it{color:var(--vert-kente);font-family:var(--italic);font-weight:400}
+.process-step p{
+  font-size:14.5px;line-height:1.65;
+  color:var(--ivoire-mu);
+  margin:0;max-width:none;
+}
+.process-step .meta{
+  display:inline-block;
+  margin-top:18px;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--vert-kente);font-weight:600;
+}
+@media(max-width:900px){.process-grid{grid-template-columns:1fr}.process-grid::before{display:none}}
+
+/* ============================================
+   FAQ — Objections handler
+   ============================================ */
+.scene-faq{
+  padding:25vh var(--pad);
+  max-width:var(--max);
+  margin:0 auto;
+}
+.faq-header{margin-bottom:64px;max-width:780px}
+.faq-header h2{
+  font-size:clamp(38px,5.2vw,80px);
+  font-weight:300;
+  line-height:1;
+}
+.faq-header h2 em.it{color:var(--ocre);font-weight:400}
+.faq-list{max-width:880px;display:flex;flex-direction:column;gap:8px}
+.faq-item{
+  background:rgba(26,20,16,.5);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--ivoire-fd);
+  border-radius:8px;
+  overflow:hidden;
+  transition:border-color .3s;
+}
+.faq-item:hover{border-color:var(--ocre)}
+.faq-q{
+  width:100%;
+  text-align:left;
+  padding:22px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  font-family:var(--sans);
+  font-size:15.5px;
+  font-weight:600;
+  color:var(--ivoire);
+  letter-spacing:-.005em;
+}
+.faq-toggle{
+  flex-shrink:0;
+  width:28px;height:28px;
+  border-radius:50%;
+  border:1px solid var(--ivoire-fd);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+  color:var(--ocre);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),background .3s,border-color .3s;
+}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--ocre);color:var(--charbon);border-color:var(--ocre)}
+.faq-a{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .5s cubic-bezier(.2,.8,.2,1);
+}
+.faq-item.open .faq-a{max-height:400px}
+.faq-a-inner{
+  padding:0 28px 24px;
+  font-size:14.5px;line-height:1.7;
+  color:var(--ivoire-mu);
+}
+.faq-a-inner strong{color:var(--ivoire);font-weight:500}
 
 /* ============================================
    SCROLL HINT
@@ -1028,6 +1272,10 @@ footer{
     <span class="dot"></span>
     Coach certifiée · PNL · CNV · Griotte moderne
   </div>
+  <div class="hero-scarcity">
+    <span class="scarcity-dot"></span>
+    Mai 2026 · <strong>3 places disponibles</strong> sur les programmes 6 mois
+  </div>
   <h1 class="h1-mega">
     <span class="line"><span class="line-inner">Je te ramène</span></span>
     <span class="line"><span class="line-inner">à <em class="it">ta propre</em></span></span>
@@ -1098,6 +1346,44 @@ footer{
   </div>
 </section>
 
+<!-- ============================================
+     PAIN POINTS — Tu te reconnais ?
+     ============================================ -->
+<section class="scene-pain">
+  <div class="pain-header">
+    <span class="eb" style="color:var(--rouge-wax)">Tu te reconnais ?</span>
+    <h2>Cinq <em class="it">tensions</em><br>que je connais par cœur.</h2>
+    <p>Ce ne sont pas des défauts. Ce sont des signaux. Ils disent que ton système intérieur a besoin d'être réécrit — pas réparé.</p>
+  </div>
+  <div class="pain-list">
+    <div class="pain-item">
+      <div class="pain-check">✓</div>
+      <p>Tu réussis en surface mais tu te sens régulièrement <strong>imposteur</strong>, comme si tu allais "être démasquée".</p>
+    </div>
+    <div class="pain-item">
+      <div class="pain-check">✓</div>
+      <p>Tu portes un <strong>leadership qu'on t'a imposé</strong> ou que tu as appris — pas celui qui te ressemble.</p>
+    </div>
+    <div class="pain-item">
+      <div class="pain-check">✓</div>
+      <p>Tu n'arrives plus à <strong>poser tes limites</strong> sans culpabilité ou sans te justifier mille fois.</p>
+    </div>
+    <div class="pain-item">
+      <div class="pain-check">✓</div>
+      <p>Ton ambition <strong>t'étouffe au lieu de te porter</strong>. Tu cours, tu performes, mais tu ne sais plus pourquoi.</p>
+    </div>
+    <div class="pain-item">
+      <div class="pain-check">✓</div>
+      <p>Tu sens que tu joues un <strong>rôle</strong> au travail — et que la femme que tu es vraiment reste cachée.</p>
+    </div>
+    <div class="pain-item">
+      <div class="pain-check">✓</div>
+      <p>Tu as essayé d'autres coachs ou thérapies — ils t'ont infantilisée ou ne sont pas allés assez profond.</p>
+    </div>
+  </div>
+  <p class="pain-cta">Si tu as coché 3 cases ou plus, <strong>nous avons quelque chose à faire ensemble.</strong></p>
+</section>
+
 <!-- Voix (about) -->
 <section class="scene-about" data-scene-griotte="kora">
   <span class="eb">II · La Voix</span>
@@ -1156,6 +1442,37 @@ footer{
   <svg class="deco-line" style="bottom:5%;left:5%;width:200px;height:120px" viewBox="0 0 200 120">
     <path d="M0 60 Q50 0, 100 60 Q150 120, 200 60"/>
   </svg>
+</section>
+
+<!-- ============================================
+     PROCESSUS — Comment ça se passe
+     ============================================ -->
+<section class="scene-process">
+  <div class="process-header">
+    <span class="eb" style="color:var(--vert-kente)">Comment ça se passe</span>
+    <h2>Trois <em class="it">étapes</em><br>simples et claires.</h2>
+    <p>Pas de tunnel marketing, pas de pression. Une rencontre, un alignement, un démarrage. Tu gardes la main à chaque étape.</p>
+  </div>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="process-num">01</div>
+      <h3>Tu réserves ton <em class="it">Call Découverte</em></h3>
+      <p>45 minutes en visio. Gratuit, confidentiel, sans engagement. On échange sur où tu en es, ce qui te bloque, ce que tu cherches. Aucune vente — juste une vraie conversation.</p>
+      <div class="meta">⏱ 45 min · 🎁 Offert</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">02</div>
+      <h3>On définit <em class="it">ton parcours</em></h3>
+      <p>Si nos énergies résonnent, je te propose le programme adapté à ton rythme et ton ambition (Étincelle, Racines, Forge ou Djeli). Tu décides en conscience, à ton rythme.</p>
+      <div class="meta">📋 Sur mesure · ✦ Sans pression</div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">03</div>
+      <h3>On <em class="it">commence</em></h3>
+      <p>Première séance dans la semaine qui suit. Outils PNL, CNV et transmission Djeli mis au service de ta transformation. Suivi WhatsApp entre les séances pour les programmes longs.</p>
+      <div class="meta">⚡ Démarrage rapide</div>
+    </div>
+  </div>
 </section>
 
 <!-- Parcours -->
@@ -1319,6 +1636,49 @@ footer{
         </div>
       </div>
     </article>
+
+  </div>
+</section>
+
+<!-- ============================================
+     FAQ — Objections handler
+     ============================================ -->
+<section class="scene-faq">
+  <div class="faq-header">
+    <span class="eb">Avant de réserver</span>
+    <h2>Les questions<br>qu'on me pose <em class="it">souvent.</em></h2>
+  </div>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q" type="button">Combien de temps avant les premiers résultats ?<span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Dès la première séance, tu repars avec <strong>une clarté nouvelle</strong> sur ce qui se joue. Les transformations profondes (sur l'identité, le leadership, la voix intérieure) s'ancrent sur 3 à 6 mois selon le programme. La PNL produit des résultats mesurables rapidement ; la transmission Djeli est un travail plus lent, plus profond.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" type="button">Est-ce que ça marche aussi pour les hommes ?<span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Mon accompagnement est <strong>spécifiquement conçu pour les femmes</strong>. La transmission Djeli, le travail sur le récit féminin, la posture de leadership féminine — tout cela fait partie d'un cadre que je n'adapte pas. Pour les hommes, je peux te recommander des collègues coach.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" type="button">Quelle est la différence avec une thérapie classique ?<span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Le coaching travaille sur <strong>ton présent et ton futur</strong>, pas sur le diagnostic du passé. La PNL et la CNV sont des outils opérationnels qui transforment immédiatement la façon dont tu penses, communiques, agis. La tradition Djeli ajoute une dimension narrative et culturelle. Si tu as besoin d'un travail thérapeutique profond (traumatismes, dépression), je te recommanderai d'abord un.e thérapeute.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" type="button">Le Call Découverte est vraiment gratuit ? C'est quoi le piège ?<span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner"><strong>Aucun piège.</strong> 45 minutes en visio, sans engagement, sans pitch de vente. Si on travaille ensemble : tant mieux. Sinon : tu repars avec au moins une clarté ou un déclic — gratuit. C'est ma façon de faire les choses.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" type="button">Comment se déroulent les séances ?<span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">100% en <strong>visioconférence</strong> (Zoom ou Google Meet, à ton choix). Format de 60 à 90 minutes selon le programme. Les programmes longs (La Forge, Le Djeli) incluent un <strong>suivi WhatsApp entre séances</strong> et des exercices personnalisés. Tout est confidentiel.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" type="button">Puis-je payer en plusieurs fois ?<span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Oui. <strong>Les Racines</strong> (1 800€) en 3x ou 6x sans frais. <strong>La Forge</strong> (3 400€) jusqu'à 6x sans frais. <strong>Le Djeli</strong> (12 mois sur mesure) avec un échéancier mensuel ajustable. Aucune carte bancaire ni RIB demandé tant que tu n'as pas validé le démarrage.</div></div>
+    </div>
 
   </div>
 </section>
@@ -1538,6 +1898,19 @@ footer{
     }, {threshold: 0.5});
     document.querySelectorAll('[data-counter]').forEach(el => ctIO.observe(el));
   }
+
+  // ============================================
+  // FAQ accordion
+  // ============================================
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      // Close all others
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
 })();
 </script>
 
