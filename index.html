@@ -69,21 +69,15 @@ body{
   position:relative;
 }
 
-/* Background overlay that interpolates with scroll */
+/* Background — subtle static halo only, no scroll-driven hue shift */
 .bg-flow{
   position:fixed;
   inset:0;
   z-index:-1;
   pointer-events:none;
   background:
-    radial-gradient(ellipse 60vw 50vh at calc(50% + var(--scroll) * 30vw - 15vw) calc(40% + var(--scroll) * 20vh) ,
-      hsla(calc(20 + var(--scroll) * 200), 60%, 18%, .7) 0%,
-      transparent 60%),
-    radial-gradient(ellipse 80vw 60vh at calc(70% - var(--scroll) * 50vw) 50%,
-      hsla(calc(40 - var(--scroll) * 180), 50%, 14%, .55) 0%,
-      transparent 70%),
+    radial-gradient(ellipse 50vw 40vh at 50% 0%, rgba(212,165,116,.06) 0%, transparent 60%),
     var(--charbon);
-  transition:background .25s linear;
 }
 
 /* Grain texture */
@@ -150,17 +144,15 @@ button{font-family:inherit;background:none;border:none;color:inherit;cursor:poin
 .griotte{
   position:fixed;
   top:50%;
-  right:calc(2vw + (var(--scroll) - .5) * 5vw);
-  width:clamp(180px,22vw,320px);
+  right:3vw;
+  width:clamp(140px,16vw,240px);
   aspect-ratio:1/1.4;
-  z-index:1;  /* DERRIÈRE le contenu marketing */
+  z-index:1;
   pointer-events:none;
-  transform:translateY(calc(-50% + (var(--scroll) - .5) * 80px))
-            scale(calc(.9 + sin(var(--scroll) * 6.28) * .03))
-            rotate(calc((var(--scroll) - .5) * 8deg));
+  transform:translateY(-50%);
   filter:drop-shadow(0 24px 48px rgba(0,0,0,.5));
-  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .5s linear;
-  opacity:.55;  /* plus discrète */
+  transition:opacity .6s linear;
+  opacity:.18;  /* TRÈS discrète : juste une présence atmosphérique */
 }
 .figure{
   position:absolute;
@@ -384,9 +376,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   gap:20px;
 }
 .concret-card{
-  background:rgba(26,20,16,.7);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  background:var(--charbon-2);
   border:1px solid var(--ivoire-fd);
   border-radius:10px;
   padding:32px 28px;
@@ -491,7 +481,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    AVANT / APRÈS — Transformation visuelle
    ============================================ */
 .scene-shift{
-  padding:25vh var(--pad);
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
 }
@@ -580,7 +570,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    POURQUOI MOI — USP différenciants
    ============================================ */
 .scene-why{
-  padding:25vh var(--pad);
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
 }
@@ -590,7 +580,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   font-weight:300;
   line-height:1;
 }
-.why-header h2 em.it{color:var(--jaune-mali);font-weight:400}
+.why-header h2 em.it{color:var(--ocre);font-weight:400}
 .why-header p{
   font-size:clamp(15px,1.15vw,18px);
   line-height:1.7;
@@ -605,18 +595,18 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 }
 .why-card{
   padding:40px 32px;
-  background:rgba(232,183,60,.04);
-  border:1px solid rgba(232,183,60,.2);
+  background:var(--charbon-2);
+  border:1px solid var(--ivoire-fd);
   border-radius:12px;
   display:flex;flex-direction:column;gap:16px;
   transition:border-color .3s,transform .4s cubic-bezier(.2,.8,.2,1);
 }
-.why-card:hover{border-color:var(--jaune-mali);transform:translateY(-4px)}
+.why-card:hover{border-color:var(--ocre);transform:translateY(-4px)}
 .why-num{
   font-family:var(--display);
   font-size:64px;
   font-weight:200;
-  color:var(--jaune-mali);
+  color:var(--ocre);
   line-height:1;
   letter-spacing:-.04em;
 }
@@ -628,7 +618,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   line-height:1.1;
   color:var(--ivoire);
 }
-.why-card h3 em.it{color:var(--jaune-mali);font-family:var(--italic);font-weight:400}
+.why-card h3 em.it{color:var(--ocre);font-family:var(--italic);font-weight:400}
 .why-card p{
   font-size:14.5px;line-height:1.65;
   color:var(--ivoire-mu);margin:0;max-width:none;
@@ -640,7 +630,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    TÉMOIGNAGES
    ============================================ */
 .scene-testi{
-  padding:25vh var(--pad);
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
 }
@@ -676,9 +666,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 }
 .testi-card{
   padding:40px 36px;
-  background:rgba(26,20,16,.6);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+  background:var(--charbon-2);
   border:1px solid var(--ivoire-fd);
   border-radius:12px;
   display:flex;flex-direction:column;
@@ -730,7 +718,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    GARANTIE — Risk reversal
    ============================================ */
 .scene-warranty{
-  padding:18vh var(--pad);
+  padding:14vh var(--pad);
   max-width:1200px;
   margin:0 auto;
 }
@@ -855,7 +843,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    PAIN POINTS — "Tu te reconnais ?"
    ============================================ */
 .scene-pain{
-  padding:30vh var(--pad) 20vh;
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
 }
@@ -920,7 +908,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    PROCESSUS — Comment ça se passe
    ============================================ */
 .scene-process{
-  padding:25vh var(--pad);
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
 }
@@ -1001,7 +989,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    FAQ — Objections handler
    ============================================ */
 .scene-faq{
-  padding:25vh var(--pad);
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
 }
@@ -1014,9 +1002,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 .faq-header h2 em.it{color:var(--ocre);font-weight:400}
 .faq-list{max-width:880px;display:flex;flex-direction:column;gap:8px}
 .faq-item{
-  background:rgba(26,20,16,.5);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+  background:var(--charbon-2);
   border:1px solid var(--ivoire-fd);
   border-radius:8px;
   overflow:hidden;
@@ -1097,7 +1083,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    SECTIONS NARRATIVES (about, intro outils, etc.)
    ============================================ */
 .scene-about{
-  padding:30vh var(--pad) 30vh;
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
 }
@@ -1241,19 +1227,19 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    FEMME — Pour qui
    ============================================ */
 .scene-femme{
-  padding:30vh var(--pad) 30vh;
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
   position:relative;
 }
-.scene-femme .h2-mega em.it{color:var(--jaune-mali)}
-.scene-femme .accent{color:var(--jaune-mali)}
+.scene-femme .h2-mega em.it{color:var(--ocre)}
+.scene-femme .accent{color:var(--ocre)}
 
 /* ============================================
    PARCOURS
    ============================================ */
 .scene-parcours{
-  padding:25vh var(--pad) 15vh;
+  padding:18vh var(--pad) 14vh;
   max-width:var(--max);
   margin:0 auto;
   position:relative;
@@ -1295,9 +1281,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 
 .offres{display:flex;flex-direction:column;gap:24px;max-width:1100px;margin:0 auto}
 .offre{
-  background:rgba(26,20,16,.7);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+  background:var(--charbon-2);
   border:1px solid var(--ivoire-fd);
   border-radius:10px;
   padding:48px 44px;
@@ -1308,7 +1292,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
 .offre:hover{border-color:var(--ocre);transform:translateY(-4px);box-shadow:0 30px 80px -20px rgba(200,149,109,.18)}
 .offre.featured{
   border-color:var(--ocre);
-  background:linear-gradient(135deg,rgba(26,20,16,.7),rgba(58,28,20,.6));
+  background:linear-gradient(135deg,var(--charbon-2),var(--charbon-3));
 }
 .offre-pill{
   position:absolute;top:24px;right:32px;
@@ -1378,7 +1362,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
    CALL — Le Premier Pas
    ============================================ */
 .scene-call{
-  padding:25vh var(--pad);
+  padding:18vh var(--pad);
   background:linear-gradient(135deg,var(--ocre) 0%,var(--terre) 100%);
   color:var(--charbon);
   text-align:center;
@@ -1839,7 +1823,7 @@ footer{
      ============================================ -->
 <section class="scene-why">
   <div class="why-header">
-    <span class="eb" style="color:var(--jaune-mali)">Ce qui me différencie</span>
+    <span class="eb">Ce qui me différencie</span>
     <h2>Trois choses que <em class="it">personne d'autre</em><br>ne fait comme moi.</h2>
     <p>Le marché du coaching est saturé. Voici pourquoi mes clientes choisissent — et restent.</p>
   </div>
@@ -2322,44 +2306,28 @@ footer{
   const toolsTrack = document.querySelector('[data-tools-track]');
   const toolSlides = document.querySelectorAll('.tool-slide');
 
-  // Background flow
+  // Scroll progress (used for top progress bar + lozenge scale only)
   function update(){
     const scrollY = window.scrollY;
     const sh = document.documentElement.scrollHeight - window.innerHeight;
     const p = sh > 0 ? scrollY / sh : 0;
 
-    // Set scroll progress as CSS var (drives bg-flow, lozenge, griotte position)
     document.documentElement.style.setProperty('--scroll', p.toFixed(4));
     document.documentElement.style.setProperty('--scroll-px', scrollY + 'px');
 
-    // === GRIOTTE — continuous crossfade based on which scene is currently
-    //   most visible. We compute each scene's "centeredness" and pick top 2
-    //   to crossfade.
+    // === GRIOTTE — pick the closest scene's figure (no blending, simpler)
     const vh = window.innerHeight;
     const center = scrollY + vh / 2;
-    const distances = [];
+    let topFig = null;
+    let topDist = Infinity;
     scenes.forEach(s => {
       const r = s.getBoundingClientRect();
       const sceneCenter = scrollY + r.top + r.height / 2;
       const dist = Math.abs(center - sceneCenter);
-      distances.push({figure: s.dataset.sceneGriotte, dist, height: r.height});
+      if (dist < topDist) { topDist = dist; topFig = s.dataset.sceneGriotte; }
     });
-    // Sort by distance asc
-    distances.sort((a,b) => a.dist - b.dist);
-    // Top two: blend
-    const top = distances[0];
-    const second = distances[1] || top;
-    const totalDist = (top.dist + second.dist) || 1;
-    const wTop = 1 - (top.dist / (top.dist + second.dist || 1));
-    // Set opacity for each figure
     Object.keys(figureMap).forEach(name => {
-      let opa = 0;
-      if (name === top.figure) opa = Math.max(opa, .95);
-      if (name === second.figure && top.figure !== second.figure) {
-        const blend = top.dist / (top.dist + second.dist) ;
-        opa = Math.max(opa, blend * .6);
-      }
-      figureMap[name].style.opacity = opa.toFixed(3);
+      figureMap[name].style.opacity = (name === topFig) ? '1' : '0';
     });
 
     // === TOOLS HORIZONTAL PINNING
