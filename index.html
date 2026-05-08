@@ -98,8 +98,7 @@ button{font-family:inherit;background:none;border:none;color:inherit;cursor:none
   transition:width .25s,height .25s,background .25s,opacity .25s;
   mix-blend-mode:difference;
 }
-.cursor.hover{width:38px;height:38px;background:var(--or);mix-blend-mode:normal;opacity:.5}
-.cursor.click{width:6px;height:6px}
+.cursor.click{width:6px;height:6px;opacity:.7}
 @media(max-width:900px){.cursor{display:none}}
 
 /* ============================================
@@ -1656,10 +1655,6 @@ html.js-rv .rv:not(.in){opacity:0;transform:translateY(40px)}
       requestAnimationFrame(tick);
     }
     tick();
-    document.querySelectorAll('a, button, .step, .offre, .gal-card, .tool-img, .about-img, .femme-img').forEach(el => {
-      el.addEventListener('mouseenter', () => cur.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
-    });
     document.addEventListener('mousedown', () => cur.classList.add('click'));
     document.addEventListener('mouseup', () => cur.classList.remove('click'));
   }
