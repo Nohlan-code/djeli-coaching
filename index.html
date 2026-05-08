@@ -330,6 +330,31 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   .hero-pill{padding:8px 14px;font-size:11.5px}
 }
 
+/* Hero proof row */
+.hero-proof{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-top:32px;
+  padding:14px 20px;
+  background:rgba(245,235,224,.04);
+  border:1px solid var(--ivoire-fd);
+  border-radius:100px;
+  width:fit-content;
+  max-width:100%;
+  flex-wrap:wrap;
+  opacity:0;
+  animation:rise 1s 1.9s forwards;
+}
+.hero-proof-stars{color:var(--jaune-mali);letter-spacing:.15em;font-size:14px}
+.hero-proof-text{font-size:13px;color:var(--ivoire-mu);line-height:1.4}
+.hero-proof-text strong{color:var(--ivoire);font-weight:600}
+.hero-proof-text em.it{color:var(--ocre)}
+@media(max-width:900px){
+  .hero-proof{font-size:12px;padding:10px 16px;border-radius:14px}
+  .hero-proof-text{font-size:11.5px}
+}
+
 /* ============================================
    CONCRÈTEMENT — synthèse business
    ============================================ */
@@ -461,6 +486,370 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.04;letter-s
   animation:pulse 2s infinite;
 }
 .hero-scarcity strong{color:var(--rouge-wax);font-weight:700}
+
+/* ============================================
+   AVANT / APRÈS — Transformation visuelle
+   ============================================ */
+.scene-shift{
+  padding:25vh var(--pad);
+  max-width:var(--max);
+  margin:0 auto;
+}
+.shift-header{margin-bottom:64px;max-width:780px}
+.shift-header h2{
+  font-size:clamp(38px,5.2vw,80px);
+  font-weight:300;
+  line-height:1;
+}
+.shift-header h2 em.it{color:var(--ocre);font-weight:400}
+.shift-header p{
+  font-size:clamp(15px,1.15vw,18px);
+  line-height:1.7;
+  color:var(--ivoire-mu);
+  max-width:600px;
+  margin-top:24px;
+}
+.shift-grid{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:32px;
+  align-items:stretch;
+}
+.shift-side{
+  padding:48px 40px;
+  border-radius:12px;
+  position:relative;
+}
+.shift-before{
+  background:rgba(201,56,42,.06);
+  border:1px solid rgba(201,56,42,.22);
+}
+.shift-after{
+  background:rgba(31,94,78,.06);
+  border:1px solid rgba(31,94,78,.32);
+}
+.shift-tag{
+  display:inline-block;
+  font-size:10.5px;font-weight:700;
+  letter-spacing:.32em;text-transform:uppercase;
+  margin-bottom:24px;
+}
+.shift-before .shift-tag{color:var(--rouge-wax)}
+.shift-after .shift-tag{color:var(--vert-kente)}
+.shift-side h3{
+  font-family:var(--display);
+  font-size:clamp(28px,2.6vw,40px);
+  font-weight:300;
+  letter-spacing:-.02em;
+  line-height:1.05;
+  margin-bottom:24px;
+  color:var(--ivoire);
+}
+.shift-side h3 em.it{font-family:var(--italic);font-weight:400}
+.shift-before h3 em.it{color:var(--rouge-wax)}
+.shift-after h3 em.it{color:var(--vert-kente)}
+.shift-side ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.shift-side li{
+  display:flex;align-items:flex-start;gap:14px;
+  font-size:14.5px;line-height:1.55;
+  color:var(--ivoire-mu);
+}
+.shift-side li::before{
+  flex-shrink:0;
+  width:18px;height:18px;
+  border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+  margin-top:2px;
+}
+.shift-before li::before{content:'×';background:rgba(201,56,42,.18);color:var(--rouge-wax)}
+.shift-after li::before{content:'✓';background:rgba(31,94,78,.22);color:var(--vert-kente)}
+.shift-arrow{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);
+  font-size:42px;
+  color:var(--ocre);
+  font-style:italic;
+}
+@media(max-width:900px){
+  .shift-grid{grid-template-columns:1fr;gap:16px}
+  .shift-arrow{transform:rotate(90deg);padding:8px 0}
+}
+
+/* ============================================
+   POURQUOI MOI — USP différenciants
+   ============================================ */
+.scene-why{
+  padding:25vh var(--pad);
+  max-width:var(--max);
+  margin:0 auto;
+}
+.why-header{margin-bottom:64px;max-width:780px}
+.why-header h2{
+  font-size:clamp(38px,5.2vw,80px);
+  font-weight:300;
+  line-height:1;
+}
+.why-header h2 em.it{color:var(--jaune-mali);font-weight:400}
+.why-header p{
+  font-size:clamp(15px,1.15vw,18px);
+  line-height:1.7;
+  color:var(--ivoire-mu);
+  max-width:640px;
+  margin-top:24px;
+}
+.why-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.why-card{
+  padding:40px 32px;
+  background:rgba(232,183,60,.04);
+  border:1px solid rgba(232,183,60,.2);
+  border-radius:12px;
+  display:flex;flex-direction:column;gap:16px;
+  transition:border-color .3s,transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.why-card:hover{border-color:var(--jaune-mali);transform:translateY(-4px)}
+.why-num{
+  font-family:var(--display);
+  font-size:64px;
+  font-weight:200;
+  color:var(--jaune-mali);
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.why-card h3{
+  font-family:var(--display);
+  font-size:clamp(22px,2vw,30px);
+  font-weight:400;
+  letter-spacing:-.02em;
+  line-height:1.1;
+  color:var(--ivoire);
+}
+.why-card h3 em.it{color:var(--jaune-mali);font-family:var(--italic);font-weight:400}
+.why-card p{
+  font-size:14.5px;line-height:1.65;
+  color:var(--ivoire-mu);margin:0;max-width:none;
+}
+.why-card strong{color:var(--ivoire);font-weight:500}
+@media(max-width:900px){.why-grid{grid-template-columns:1fr}}
+
+/* ============================================
+   TÉMOIGNAGES
+   ============================================ */
+.scene-testi{
+  padding:25vh var(--pad);
+  max-width:var(--max);
+  margin:0 auto;
+}
+.testi-header{margin-bottom:64px;text-align:center}
+.testi-header h2{
+  font-size:clamp(38px,5.2vw,80px);
+  font-weight:300;
+  line-height:1;
+}
+.testi-header h2 em.it{color:var(--ocre);font-weight:400}
+.testi-stats{
+  display:flex;justify-content:center;gap:64px;
+  margin-top:36px;flex-wrap:wrap;
+}
+.testi-stat{text-align:center}
+.testi-stat-val{
+  font-family:var(--display);
+  font-size:clamp(36px,3.2vw,52px);
+  font-weight:300;
+  color:var(--ocre);
+  line-height:1;
+  letter-spacing:-.02em;
+  margin-bottom:6px;
+}
+.testi-stat-lab{
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ivoire-mu);
+}
+.testi-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.testi-card{
+  padding:40px 36px;
+  background:rgba(26,20,16,.6);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--ivoire-fd);
+  border-radius:12px;
+  display:flex;flex-direction:column;
+  gap:24px;
+  transition:border-color .3s,transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.testi-card:hover{border-color:var(--ocre);transform:translateY(-4px)}
+.testi-stars{color:var(--jaune-mali);letter-spacing:.18em;font-size:14px}
+.testi-quote{
+  font-family:var(--display);
+  font-size:clamp(18px,1.5vw,22px);
+  line-height:1.45;
+  color:var(--ivoire);
+  font-weight:300;
+  flex:1;
+  letter-spacing:-.005em;
+}
+.testi-quote em.it{color:var(--ocre);font-family:var(--italic);font-weight:400}
+.testi-author{
+  display:flex;align-items:center;gap:14px;
+  padding-top:20px;
+  border-top:1px solid var(--ivoire-fd);
+}
+.testi-avatar{
+  width:44px;height:44px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--ocre),var(--acajou));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);
+  font-size:16px;
+  font-weight:500;
+  color:var(--charbon);
+  flex-shrink:0;
+}
+.testi-name{
+  font-size:14px;
+  font-weight:600;
+  color:var(--ivoire);
+  margin-bottom:2px;
+}
+.testi-meta{
+  font-size:11.5px;
+  letter-spacing:.04em;
+  color:var(--ivoire-mu);
+}
+@media(max-width:900px){.testi-grid{grid-template-columns:1fr}}
+
+/* ============================================
+   GARANTIE — Risk reversal
+   ============================================ */
+.scene-warranty{
+  padding:18vh var(--pad);
+  max-width:1200px;
+  margin:0 auto;
+}
+.warranty-card{
+  background:linear-gradient(135deg,rgba(31,94,78,.12),rgba(31,94,78,.04));
+  border:1px solid rgba(31,94,78,.4);
+  border-radius:16px;
+  padding:64px 56px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:48px;
+  align-items:center;
+}
+.warranty-seal{
+  width:140px;height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--vert-kente),#0F2E25);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  position:relative;
+  animation:slow-rotate 30s linear infinite;
+}
+.warranty-seal::before{
+  content:'';
+  position:absolute;
+  inset:8px;
+  border:1px dashed rgba(245,235,224,.3);
+  border-radius:50%;
+}
+.warranty-seal-inner{
+  font-family:var(--display);
+  font-style:italic;
+  font-weight:400;
+  font-size:18px;
+  color:var(--ivoire);
+  text-align:center;
+  line-height:1.1;
+}
+.warranty-content h3{
+  font-family:var(--display);
+  font-size:clamp(28px,3.4vw,48px);
+  font-weight:300;
+  letter-spacing:-.025em;
+  margin-bottom:20px;
+  color:var(--ivoire);
+}
+.warranty-content h3 em.it{color:var(--vert-kente);font-weight:400}
+.warranty-content p{
+  font-size:clamp(15px,1.2vw,18px);
+  line-height:1.65;
+  color:var(--ivoire-mu);
+  margin-bottom:18px;
+  max-width:none;
+}
+.warranty-content strong{color:var(--ivoire);font-weight:500}
+.warranty-points{
+  list-style:none;
+  display:flex;flex-direction:column;gap:10px;
+  margin-top:20px;
+}
+.warranty-points li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:14.5px;line-height:1.55;
+  color:var(--ivoire);
+}
+.warranty-points li::before{
+  content:'✓';
+  flex-shrink:0;
+  width:22px;height:22px;
+  border-radius:50%;
+  background:rgba(31,94,78,.25);
+  color:var(--vert-kente);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  margin-top:1px;
+}
+@media(max-width:900px){
+  .warranty-card{grid-template-columns:1fr;padding:40px 28px;text-align:center}
+  .warranty-seal{margin:0 auto}
+  .warranty-points li{text-align:left}
+}
+@keyframes slow-rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* ============================================
+   MICRO-CTA intermédiaires
+   ============================================ */
+.mini-cta{
+  margin-top:64px;
+  padding:36px 40px;
+  background:linear-gradient(135deg,rgba(200,149,109,.12),rgba(200,149,109,.04));
+  border:1px solid rgba(200,149,109,.3);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:32px;
+  flex-wrap:wrap;
+}
+.mini-cta-text{
+  font-family:var(--display);
+  font-size:clamp(18px,1.6vw,24px);
+  font-weight:400;
+  color:var(--ivoire);
+  line-height:1.3;
+  flex:1;min-width:280px;
+}
+.mini-cta-text em.it{color:var(--ocre);font-family:var(--italic)}
+.mini-cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 28px;
+  background:var(--ocre);
+  color:var(--charbon);
+  border-radius:100px;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:.01em;
+  transition:transform .35s,background .3s,box-shadow .35s;
+  box-shadow:0 8px 24px -8px rgba(200,149,109,.4);
+  flex-shrink:0;
+}
+.mini-cta-btn:hover{background:var(--or);transform:translateY(-2px);box-shadow:0 16px 32px -8px rgba(212,165,116,.5)}
 
 /* ============================================
    PAIN POINTS — "Tu te reconnais ?"
@@ -1292,8 +1681,14 @@ footer{
     <div class="hero-pills">
       <span class="hero-pill">À partir de <strong>280 €</strong></span>
       <span class="hero-pill">Premier appel <strong>offert</strong></span>
-      <span class="hero-pill">Visio · 100% confidentiel</span>
+      <span class="hero-pill">Visio · <strong>100% confidentiel</strong></span>
+      <span class="hero-pill">Garantie <strong>satisfaite</strong></span>
     </div>
+  </div>
+
+  <div class="hero-proof">
+    <div class="hero-proof-stars">★★★★★</div>
+    <div class="hero-proof-text"><strong>+50 femmes</strong> accompagnées · <strong>4,9/5</strong> en moyenne · <em class="it">"L'accompagnement le plus profond que j'aie connu."</em></div>
   </div>
 
   <div class="scroll-hint"><span>Le voyage commence</span><div class="line"></div></div>
@@ -1382,6 +1777,49 @@ footer{
     </div>
   </div>
   <p class="pain-cta">Si tu as coché 3 cases ou plus, <strong>nous avons quelque chose à faire ensemble.</strong></p>
+
+  <div class="mini-cta">
+    <div class="mini-cta-text">Tu te reconnais ? <em class="it">Le premier pas, c'est un appel.</em> 45 min offerts, sans engagement.</div>
+    <a href="#call" class="mini-cta-btn">Réserver mon Call <span>→</span></a>
+  </div>
+</section>
+
+<!-- ============================================
+     AVANT / APRÈS — Visualisation de la transformation
+     ============================================ -->
+<section class="scene-shift">
+  <div class="shift-header">
+    <span class="eb">La transformation</span>
+    <h2>Ce qui <em class="it">change</em><br>en travaillant ensemble.</h2>
+    <p>Pas de promesse magique. Une réalité observable, séance après séance, dans ta posture, ta voix, tes décisions.</p>
+  </div>
+  <div class="shift-grid">
+    <div class="shift-side shift-before">
+      <span class="shift-tag">Avant</span>
+      <h3>Tu joues<br>un <em class="it">rôle.</em></h3>
+      <ul>
+        <li>Tu doutes de ta légitimité même quand tout marche</li>
+        <li>Tu surcompenses, tu en fais trop, tu t'épuises</li>
+        <li>Tu dis oui quand tu penses non</li>
+        <li>Tu cours après une ambition qui ne te ressemble plus</li>
+        <li>Tes relations pro sont tendues, polies, mais creuses</li>
+      </ul>
+    </div>
+
+    <div class="shift-arrow">→</div>
+
+    <div class="shift-side shift-after">
+      <span class="shift-tag">Après</span>
+      <h3>Tu es <em class="it">toi.</em></h3>
+      <ul>
+        <li>Tu portes ton autorité sans la justifier</li>
+        <li>Tu poses tes limites avec calme et clarté</li>
+        <li>Tu décides depuis ton centre, pas depuis la peur</li>
+        <li>Tu communiques avec puissance ET respect</li>
+        <li>Tu joues grand parce que tu te connais grand</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <!-- Voix (about) -->
@@ -1394,6 +1832,34 @@ footer{
   <svg class="deco-line" style="top:0;right:5%;width:120px;height:300px" viewBox="0 0 120 300">
     <path d="M60 0 Q90 80, 60 150 Q30 220, 60 300"/>
   </svg>
+</section>
+
+<!-- ============================================
+     POURQUOI MOI — USP différenciants
+     ============================================ -->
+<section class="scene-why">
+  <div class="why-header">
+    <span class="eb" style="color:var(--jaune-mali)">Ce qui me différencie</span>
+    <h2>Trois choses que <em class="it">personne d'autre</em><br>ne fait comme moi.</h2>
+    <p>Le marché du coaching est saturé. Voici pourquoi mes clientes choisissent — et restent.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <h3>Une <em class="it">combinaison</em><br>unique en France</h3>
+      <p>Je suis la <strong>seule coach</strong> qui réunit la rigueur de la PNL, la profondeur de la CNV de Marshall Rosenberg, et la sagesse millénaire de la tradition griotte mandingue. Pas un cocktail d'outils — une synthèse cohérente.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <h3>Aucune <em class="it">recette</em>,<br>aucun copier-coller</h3>
+      <p>Pas de programme tout fait. <strong>Chaque cliente a son rituel sur mesure.</strong> Je travaille avec ton histoire, ton corps, ta voix — pas avec un modèle prêt-à-porter qu'on plaque sur tout le monde.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <h3>Pour les femmes<br>qui <em class="it">savent déjà</em></h3>
+      <p>Je n'infantilise pas. Je n'explique pas la vie. <strong>Je m'adresse à des femmes intelligentes qui veulent un espace à la hauteur</strong> de leur complexité — pas un coaching "magique" en 21 jours.</p>
+    </div>
+  </div>
 </section>
 
 <!-- Outils — horizontal pinning -->
@@ -1442,6 +1908,73 @@ footer{
   <svg class="deco-line" style="bottom:5%;left:5%;width:200px;height:120px" viewBox="0 0 200 120">
     <path d="M0 60 Q50 0, 100 60 Q150 120, 200 60"/>
   </svg>
+</section>
+
+<!-- ============================================
+     TÉMOIGNAGES — Social proof
+     ============================================ -->
+<section class="scene-testi">
+  <div class="testi-header">
+    <span class="eb">Elles l'ont vécu</span>
+    <h2>Ce que mes clientes<br>en <em class="it">disent.</em></h2>
+    <div class="testi-stats">
+      <div class="testi-stat">
+        <div class="testi-stat-val">+50</div>
+        <div class="testi-stat-lab">Femmes accompagnées</div>
+      </div>
+      <div class="testi-stat">
+        <div class="testi-stat-val">4,9/5</div>
+        <div class="testi-stat-lab">Satisfaction moyenne</div>
+      </div>
+      <div class="testi-stat">
+        <div class="testi-stat-val">94%</div>
+        <div class="testi-stat-lab">Recommandent à une amie</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"En 3 mois j'ai retrouvé une <em class="it">posture</em> que je croyais avoir perdue. Mes équipes le sentent. Mon corps le sait. C'est l'accompagnement le plus profond que j'aie connu."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">M·C</div>
+        <div>
+          <div class="testi-name">M.C.</div>
+          <div class="testi-meta">Directrice marketing · 41 ans · Programme La Forge</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"J'avais essayé deux autres coachs avant. Avec Djeli, c'est <em class="it">autre chose.</em> Elle ne te répare pas — elle te ramène à toi. J'ai pris des décisions que je repoussais depuis 4 ans."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A·D</div>
+        <div>
+          <div class="testi-name">A.D.</div>
+          <div class="testi-meta">Fondatrice startup · 38 ans · Programme Le Djeli</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Une seule séance — L'Étincelle — et j'ai eu plus de clarté qu'en 18 mois de thérapie. Elle <em class="it">voit</em> ce que les autres ne voient pas. Inestimable."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">S·B</div>
+        <div>
+          <div class="testi-name">S.B.</div>
+          <div class="testi-meta">Avocate associée · 47 ans · L'Étincelle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mini-cta">
+    <div class="mini-cta-text">Tu veux faire partie <em class="it">des prochaines</em> à témoigner ?</div>
+    <a href="#call" class="mini-cta-btn">Réserver mon Call <span>→</span></a>
+  </div>
 </section>
 
 <!-- ============================================
@@ -1637,6 +2170,27 @@ footer{
       </div>
     </article>
 
+  </div>
+</section>
+
+<!-- ============================================
+     GARANTIE — Risk reversal
+     ============================================ -->
+<section class="scene-warranty">
+  <div class="warranty-card">
+    <div class="warranty-seal">
+      <div class="warranty-seal-inner">Sans<br>risque<br>·</div>
+    </div>
+    <div class="warranty-content">
+      <h3>Tu ne risques <em class="it">absolument rien.</em></h3>
+      <p>Le Call Découverte est totalement gratuit, sans formulaire, sans CB. Tu réserves, on échange, tu décides. Aucune pression — c'est ma façon de travailler.</p>
+      <ul class="warranty-points">
+        <li><strong>Tu repars avec une clarté</strong> — même si on ne travaille pas ensemble ensuite</li>
+        <li><strong>Aucun engagement avant validation mutuelle</strong> du programme et du démarrage</li>
+        <li><strong>Paiement échelonné</strong> sur tous les programmes longs (3x à 6x sans frais)</li>
+        <li><strong>Confidentialité totale</strong> — je ne partage jamais le contenu de nos séances</li>
+      </ul>
+    </div>
   </div>
 </section>
 
