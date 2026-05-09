@@ -1466,6 +1466,220 @@ footer{
 
 ::selection{background:var(--ocre);color:var(--charbon)}
 ::-moz-selection{background:var(--ocre);color:var(--charbon)}
+
+/* ============================================
+   RESPONSIVE — MOBILE TIGHTENING
+   ============================================ */
+@media(max-width:900px){
+  /* Vertical rhythm — tight on mobile so page stays scannable */
+  .scene-about,.scene-pain,.scene-shift,.scene-why,.scene-testi,
+  .scene-femme,.scene-process,.scene-parcours,.scene-faq,.scene-warranty{
+    padding-top:56px;padding-bottom:40px;
+  }
+  .scene-call{padding:64px var(--pad)}
+  .scene-concret{padding:48px var(--pad) 32px}
+
+  /* Tighten internal section margins */
+  .pain-header,.shift-header,.why-header,.testi-header,
+  .process-header,.faq-header,.scene-parcours-header,
+  .page-7-header{margin-bottom:36px}
+  .h2-mega,.tool-h2{margin-bottom:20px}
+  .eb{margin-bottom:18px}
+
+  /* Hide hero scroll-hint on mobile (sticky CTA already obvious) */
+  .scroll-hint{display:none}
+
+  /* Hero — compact mobile */
+  .hero{padding:96px var(--pad) 40px;min-height:auto}
+  .h1-mega{font-size:clamp(40px,11vw,68px);margin-bottom:20px;line-height:.95}
+  .hero-eyebrow{font-size:10px;letter-spacing:.18em;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+  .hero-eyebrow::before{width:16px}
+  .hero-scarcity{font-size:11px;padding:6px 12px;margin-bottom:18px}
+  .hero-lead{font-size:15px;margin-bottom:22px;line-height:1.5}
+  .hero-cta-row{gap:14px;margin-top:20px}
+  .hero-btn-primary{width:100%;justify-content:center;padding:16px 22px;font-size:14px}
+  .hero-pills{gap:6px;width:100%}
+  .hero-pill{padding:7px 12px;font-size:10.5px}
+  .hero-proof{margin-top:18px;padding:9px 14px;gap:8px;border-radius:12px}
+  .hero-proof-stars{font-size:11px}
+  .hero-proof-text{font-size:10.5px;line-height:1.35}
+
+  /* Top-corner widgets smaller */
+  .book-counter{top:16px;right:16px;font-size:10px;gap:8px}
+  .book-counter .num{font-size:14px}
+  .brand{top:16px;left:16px;font-size:13px}
+
+  /* Section titles — slightly smaller */
+  .h2-mega,.tool-h2,.shift-header h2,.pain-header h2,.why-header h2,
+  .testi-header h2,.process-header h2,.faq-header h2,.concret-title{
+    font-size:clamp(34px,8.5vw,52px);
+  }
+  .scene-call h2{font-size:clamp(44px,10vw,72px)}
+  .eb{font-size:10.5px;letter-spacing:.18em;margin-bottom:24px}
+
+  /* Stats rows: reduce gap */
+  .call-stats{gap:36px;margin-bottom:40px}
+  .call-stat-val{font-size:clamp(40px,9vw,60px)}
+  .testi-stats{gap:32px;margin-top:28px}
+  .testi-stat-val{font-size:clamp(28px,8vw,40px)}
+
+  /* Parcours steps — keep horizontal but tight */
+  .parcours-steps{gap:0;padding:0 8px;margin-bottom:48px}
+  .step-name{font-size:11.5px}
+  .step-dur{font-size:9.5px;letter-spacing:.12em}
+  .step-dot{width:30px;height:30px;font-size:12px}
+  .parcours-steps::before{top:15px}
+
+  /* Offres — dense mobile */
+  .offre{padding:24px 18px;border-radius:8px}
+  .offre-top{margin-bottom:18px;padding-bottom:18px;gap:14px}
+  .offre-name{font-size:clamp(26px,7.5vw,38px);margin-bottom:6px}
+  .offre-price-val{font-size:clamp(24px,6.5vw,36px)}
+  .offre-tag{font-size:13.5px}
+  .offre-meta{font-size:10px;margin-bottom:8px}
+  .offre-grid{gap:18px;margin-bottom:18px}
+  .offre-block h4{margin-bottom:8px}
+  .offre-block li{margin-bottom:4px;font-size:13px}
+  .offre-block p{font-size:13px}
+  .offre-results{padding:16px 18px;margin-bottom:18px}
+  .offre-results h4{font-size:14px;margin-bottom:8px}
+  .offre-results li{font-size:13px;margin-bottom:6px}
+  .offre-foot{flex-direction:column;align-items:stretch}
+  .offre-foot .offre-tags{order:2}
+  .offre-tag-pill{font-size:10.5px;padding:4px 9px}
+
+  /* Avant/Après compact */
+  .shift-grid{gap:10px}
+  .shift-side{padding:22px 18px}
+  .shift-arrow{padding:4px 0;font-size:24px}
+  .shift-tag{margin-bottom:14px}
+  .shift-side h3{font-size:clamp(22px,5.5vw,28px);margin-bottom:14px}
+  .shift-side ul{gap:8px}
+  .shift-side li{font-size:13px}
+
+  /* Pain points compact */
+  .pain-item{padding:14px 16px;gap:12px}
+  .pain-item p{font-size:13px;line-height:1.5}
+  .pain-cta{font-size:16px;margin-top:24px}
+  .pain-list{gap:10px}
+
+  /* Process steps compact */
+  .process-step{padding:24px 20px}
+  .process-num{width:42px;height:42px;font-size:16px;margin-bottom:14px}
+  .process-step h3{margin-bottom:10px}
+  .process-step p{font-size:13px}
+  .process-grid{gap:14px}
+
+  /* Why cards compact */
+  .why-card{padding:24px 20px;gap:10px}
+  .why-num{font-size:42px}
+  .why-card h3{font-size:clamp(18px,5vw,24px)}
+  .why-card p{font-size:13px}
+  .why-grid{gap:14px}
+
+  /* Testimonials compact */
+  .testi-card{padding:24px 20px;gap:14px}
+  .testi-quote{font-size:clamp(15px,4vw,18px);line-height:1.4}
+  .testi-grid{gap:12px}
+  .testi-author{padding-top:14px}
+
+  /* FAQ — compact, keep tap-target */
+  .faq-q{padding:14px 18px;font-size:14px;min-height:54px;gap:12px}
+  .faq-toggle{width:22px;height:22px;font-size:12px}
+  .faq-a-inner{padding:0 18px 16px;font-size:13px;line-height:1.6}
+  .faq-list{gap:6px}
+
+  /* Warranty compact */
+  .warranty-card{padding:28px 20px;gap:20px;text-align:left}
+  .warranty-seal{width:80px;height:80px}
+  .warranty-seal-inner{font-size:11px}
+  .warranty-content h3{font-size:clamp(22px,6vw,28px);margin-bottom:10px}
+  .warranty-content p{font-size:14px;margin-bottom:14px}
+  .warranty-points{margin-top:14px;gap:8px}
+  .warranty-points li{font-size:13px}
+
+  /* Mini-CTA stacks vertically */
+  .mini-cta{flex-direction:column;padding:28px 22px;gap:18px;align-items:stretch;margin-top:48px}
+  .mini-cta-text{font-size:18px;text-align:left}
+  .mini-cta-btn{justify-content:center;width:100%;padding:16px}
+
+  /* Footer */
+  footer{padding:60px var(--pad) 40px}
+  .foot-inner{gap:36px}
+  .foot-cols{gap:32px}
+
+  /* Fixed CTA — keep full-width on mobile but tighter */
+  .cta-fixed{
+    bottom:12px;left:12px;right:12px;
+    justify-content:center;
+    padding:16px 20px;
+    font-size:14px;
+    border-radius:14px;
+  }
+  .cta-fixed .pulse{display:inline-block}
+
+  /* Touch: ensure 44px min tap targets */
+  .nav-cta,.faq-q,.btn,.cta-fixed,.mini-cta-btn,.hero-btn-primary,
+  .hero-pill,.offre-tag-pill,.step{min-height:44px}
+}
+
+@media(max-width:600px){
+  /* Even tighter on small phones (iPhone SE / Mini width 375px or less) */
+  .scene-about,.scene-pain,.scene-shift,.scene-why,.scene-testi,
+  .scene-femme,.scene-process,.scene-parcours,.scene-faq,.scene-warranty{
+    padding-top:48px;padding-bottom:32px;
+  }
+  .scene-call{padding:56px var(--pad)}
+  .hero{padding:88px var(--pad) 40px}
+
+  /* Trim further internals */
+  .pain-header,.shift-header,.why-header,.testi-header,
+  .process-header,.faq-header,.scene-parcours-header,
+  .page-7-header{margin-bottom:28px}
+  .h2-mega,.tool-h2{margin-bottom:14px}
+  .pain-list,.why-grid,.testi-grid,.process-grid,.shift-grid{gap:12px}
+  .offres{gap:14px}
+
+  /* Mini-CTA tighter or hide on tiniest screens (sticky CTA suffices) */
+  .mini-cta{padding:22px 18px;margin-top:36px}
+
+  /* Decorative deco-line SVGs hidden mobile (purely aesthetic) */
+  .deco-line{display:none}
+
+  /* H1: even smaller min */
+  .h1-mega{font-size:clamp(40px,12vw,60px)}
+
+  /* Stats: stack flex but smaller */
+  .call-stats{gap:24px}
+  .testi-stats{gap:20px}
+
+  /* Pills + scarcity wrap better */
+  .hero-pills{gap:6px}
+  .hero-pill{padding:7px 11px;font-size:10.5px}
+  .hero-pill strong{font-size:11px}
+
+  /* Top-corner widgets even smaller */
+  .book-counter{font-size:9.5px;gap:6px}
+  .book-counter .num{font-size:12px}
+  .book-counter span:not(.num){display:none}  /* hide "Page" + "/ IX" labels, keep only roman num */
+  .book-counter .num{font-size:14px}
+  .brand{font-size:12px}
+  .brand .lozenge{width:9px;height:9px}
+
+  /* Parcours steps: 2x2 grid on tiny screens */
+  .parcours-steps{flex-wrap:wrap;gap:24px 0;padding:0}
+  .parcours-steps::before{display:none}
+  .step{flex:0 0 50%}
+
+  /* Tools sticky disabled (was 900px) — already handled */
+
+  /* Offre top stacks */
+  .offre-top{flex-direction:column;gap:20px}
+  .offre-price{text-align:left;min-width:0}
+}
+
+/* iOS Safari prevents zoom on focus when input font ≥ 16px */
+input,select,textarea{font-size:max(16px,inherit)}
 </style>
 </head>
 <body>
